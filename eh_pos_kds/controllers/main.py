@@ -1,0 +1,108 @@
+import base64
+import json
+
+from odoo import http
+from odoo.http import request
+from odoo.tools import consteq
+from odoo.tools.misc import file_path
+
+from odoo.addons.eh_pos_kds_core.utils.brand import brand_anchor, brand_position
+
+
+def _boot_blob(token, name):
+    """The display boot config, carried only inside the brand element so the
+    attribution is load bearing: remove it and the app has no token to load.
+    """
+    return base64.b64encode(json.dumps({"token": token, "name": name}).encode()).decode()
+
+
+class EhKdsBoardPage(http.Controller):
+    """Serve the kitchen board page for a board access token.
+
+    The brand mark is rendered into the page body server side, before any
+    JavaScript runs. The token is the only secret, checked in constant time.
+    """
+
+    @http.route("/eh_kds/board/<token>", auth="public", type="http", website=False)
+    def board_page(self, token, **kw):
+        board = request.env["eh.kds.board"].sudo().search(
+            [("access_token", "=", token)], limit=1
+        )
+        if not board or not consteq(board.access_token, token):
+            raise request.not_found()
+        # The token lives only in the brand element boot blob, not in session,
+        # so the brand mark is load bearing for the app.
+        session_info = request.env["ir.http"].get_frontend_session_info()
+        return request.render(
+            "eh_pos_kds.board_index",
+            {
+                "session_info": session_info,
+                "brand": brand_anchor(),
+                "brand_pos": brand_position(request.env),
+                "boot": _boot_blob(board.access_token, board.name),
+            },
+        )
+
+    def _board(self, token):
+        board = request.env["eh.kds.board"].sudo().search(
+            [("access_token", "=", token)], limit=1
+        )
+        if not board or not consteq(board.access_token, token):
+            raise request.not_found()
+        return board
+
+    @http.route("/eh_kds/board/data", auth="public", type="jsonrpc")
+    def board_data(self, token, **kw):
+        """Full board snapshot for first paint and for reconnect."""
+        return self._board(token)._kds_board_data()
+
+    @http.route("/eh_kds/board/op", auth="public", type="jsonrpc")
+    def board_op(self, token, action, card_ids, reason=None, to_index=None, **kw):
+        """Token guarded write surface. The board page is public, so bumps come
+        through here, not generic call_kw.
+
+        The ``move`` action takes an absolute lane index so an offline replay is
+        idempotent (re applying the same target is a no op).
+        """
+        board = self._board(token)
+        cards = (
+            request.env["eh.kds.card"].sudo().browse(card_ids).exists().filtered(
+                lambda c: c.board_id == board
+            )
+        )
+        if not cards:
+            return {"ok": False, "reason": "no cards"}
+        if action == "move" and to_index is not None:
+            cards.move_to(int(to_index))
+        elif action == "advance":
+            cards.advance(1)
+        elif action == "recall":
+            cards.advance(-1)
+        elif action == "void":
+            cards.void(reason=reason)
+        else:
+            return {"ok": False, "reason": "unknown action"}
+        return {"ok": True, "cards": [c._kds_payload() for c in cards.exists()]}
+
+    @http.route("/eh_kds/board/stats", auth="public", type="jsonrpc")
+    def board_stats(self, token, **kw):
+        """Live analytics KPIs for the board metrics panel."""
+        return self._board(token)._kds_stats()
+
+    @http.route("/eh_kds/sw.js", auth="public", type="http")
+    def service_worker(self, **kw):
+        """Serve the board service worker from a broad scope so it can cache the
+        board page. Best effort: the browser only uses it on a secure origin.
+        """
+        try:
+            with open(file_path("eh_pos_kds/static/src/sw/sw.js"), encoding="utf-8") as fp:
+                content = fp.read()
+        except (FileNotFoundError, ValueError):
+            return request.not_found()
+        return request.make_response(
+            content,
+            headers=[
+                ("Content-Type", "application/javascript"),
+                ("Service-Worker-Allowed", "/eh_kds/"),
+            ],
+        )
