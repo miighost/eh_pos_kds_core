@@ -45,7 +45,8 @@ class PosOrder(models.Model):
     def _eh_kds_ref(self):
         ref = super()._eh_kds_ref()
         if self._is_eh_kds_restaurant() and self.table_id:
-            return "T%s %s" % (self.table_id.table_number, ref)
+            table_ref = getattr(self.table_id, "table_number", False) or getattr(self.table_id, "name", False) or str(self.table_id.id)
+            return "T%s %s" % (table_ref, ref)
         return ref
 
     # -- intake on every sync for restaurant (course firing) -----------------

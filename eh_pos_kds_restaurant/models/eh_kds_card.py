@@ -11,6 +11,7 @@ class EhKdsCard(models.Model):
         data = super()._kds_payload()
         item = self.item_id
         table = item.ticket_id.eh_table_id
-        data["table"] = table.table_number if table else False
+        table_name = (getattr(table, "table_number", False) or getattr(table, "name", False) or (str(table.id) if table else False)) if table else False
+        data["table"] = table_name
         data["course"] = item.eh_course_index if item.eh_course_id else False
         return data

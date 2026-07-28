@@ -11,10 +11,7 @@
                 <meta name="mobile-web-app-capable" content="yes"/>
                 <title>Kitchen Display</title>
                 <script type="text/javascript">
-                    var odoo = <t t-out="json.dumps({
-                        'csrf_token': request.csrf_token(None),
-                        '__session_info__': session_info,
-                    })"/>;
+                    var odoo = <t t-out="odoo_json"/>;
                 </script>
                 <t t-call-assets="eh_pos_kds.board_assets"/>
             </head>

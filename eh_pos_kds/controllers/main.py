@@ -6,6 +6,8 @@ from odoo.http import request
 from odoo.tools import consteq
 from odoo.tools.misc import file_path
 
+from markupsafe import Markup
+
 from odoo.addons.eh_pos_kds_core.utils.brand import brand_anchor, brand_position
 
 
@@ -33,10 +35,19 @@ class EhKdsBoardPage(http.Controller):
         # The token lives only in the brand element boot blob, not in session,
         # so the brand mark is load bearing for the app.
         session_info = request.env["ir.http"].get_frontend_session_info()
+        odoo_json = Markup(
+            json.dumps(
+                {
+                    "csrf_token": request.csrf_token(None),
+                    "__session_info__": session_info,
+                }
+            )
+        )
         return request.render(
             "eh_pos_kds.board_index",
             {
                 "session_info": session_info,
+                "odoo_json": odoo_json,
                 "brand": brand_anchor(),
                 "brand_pos": brand_position(request.env),
                 "boot": _boot_blob(board.access_token, board.name),
@@ -51,10 +62,20 @@ class EhKdsBoardPage(http.Controller):
             raise request.not_found()
         return board
 
+    @http.route("/eh_kds/status/<token>", auth="public", type="http", website=False)
+    def status_page(self, token, **kw):
+        """Serve the public order status page."""
+        return self.board_page(token, **kw)
+
     @http.route("/eh_kds/board/data", auth="public", type="jsonrpc")
     def board_data(self, token, **kw):
         """Full board snapshot for first paint and for reconnect."""
         return self._board(token)._kds_board_data()
+
+    @http.route("/eh_kds/status/data", auth="public", type="jsonrpc")
+    def status_data(self, token, **kw):
+        """Status screen JSON snapshot for now serving / preparing."""
+        return self._board(token)._kds_status_data()
 
     @http.route("/eh_kds/board/op", auth="public", type="jsonrpc")
     def board_op(self, token, action, card_ids, reason=None, to_index=None, **kw):
