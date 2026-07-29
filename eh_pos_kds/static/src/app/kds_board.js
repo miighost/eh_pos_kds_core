@@ -330,7 +330,22 @@ export class KdsBoard extends Component {
         return `${Math.floor(s / 60)}m ago`;
     }
 
+    isLastLane(card) {
+        const lane = this.laneById(card.lane_id);
+        const lanes = this.state.board.lanes;
+        return lane && lanes && lanes.length > 0 && lane.id === lanes[lanes.length - 1].id;
+    }
+
     ageLabel(card) {
+        if (this.isLastLane(card)) {
+            // Completed card: freeze timer at static total prep time (placed_at to completed timestamp)
+            const start = this._parse(card.placed_at);
+            const end = this._parse(card.changed_at || card.placed_at);
+            const secs = Math.max(0, Math.floor((end - start) / 1000));
+            const m = Math.floor(secs / 60);
+            const s = secs % 60;
+            return `✓ ${m}:${s.toString().padStart(2, "0")}`;
+        }
         const timestamp = card.changed_at || card.placed_at;
         const secs = Math.max(0, Math.floor((this._serverNow() - this._parse(timestamp)) / 1000));
         const m = Math.floor(secs / 60);
@@ -339,6 +354,9 @@ export class KdsBoard extends Component {
     }
 
     slaClass(card) {
+        if (this.isLastLane(card)) {
+            return ""; // Completed cards never trigger SLA warnings
+        }
         const lane = this.laneById(card.lane_id);
         if (!lane || !lane.sla_minutes) {
             return "";
@@ -359,7 +377,7 @@ export class KdsBoard extends Component {
 
     scanSla() {
         for (const card of this.state.cards) {
-            if (this.slaClass(card) === "is-danger" && !this.alerted.has(card.id)) {
+            if (!this.isLastLane(card) && this.slaClass(card) === "is-danger" && !this.alerted.has(card.id)) {
                 this.alerted.add(card.id);
                 this._beep();
             }
