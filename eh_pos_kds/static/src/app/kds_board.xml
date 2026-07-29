@@ -8,11 +8,27 @@
         <div t-elif="state.mode === 'status'" class="o_eh_kds_status_screen">
             <header class="o_eh_kds_topbar">
                 <span class="o_eh_kds_title" t-esc="state.board.name"/>
-                <span class="o_eh_kds_status_badge">ORDER STATUS</span>
-                <span class="o_eh_kds_live" t-att-class="{ 'is-live': state.connected and !state.offline, 'is-offline': state.offline }">
-                    <t t-if="state.offline">OFFLINE</t>
-                    <t t-else="">LIVE</t>
-                </span>
+                <div class="o_eh_kds_actions">
+                    <button class="o_eh_kds_btn"
+                            t-att-class="{ 'is-active': state.statusView === 'both' }"
+                            t-on-click="() => this.setStatusView('both')">
+                        Dual View
+                    </button>
+                    <button class="o_eh_kds_btn"
+                            t-att-class="{ 'is-active': state.statusView === 'preparing' }"
+                            t-on-click="() => this.setStatusView('preparing')">
+                        Preparing Only
+                    </button>
+                    <button class="o_eh_kds_btn"
+                            t-att-class="{ 'is-active': state.statusView === 'ready' }"
+                            t-on-click="() => this.setStatusView('ready')">
+                        Ready Only
+                    </button>
+                    <span class="o_eh_kds_live" t-att-class="{ 'is-live': state.connected and !state.offline, 'is-offline': state.offline }">
+                        <t t-if="state.offline">OFFLINE</t>
+                        <t t-else="">LIVE</t>
+                    </span>
+                </div>
             </header>
 
             <div t-if="state.statusData and state.statusData.now_serving" class="o_eh_kds_now_serving_banner">
@@ -24,8 +40,9 @@
                 </span>
             </div>
 
-            <div class="o_eh_kds_status_columns">
-                <div class="o_eh_kds_status_col o_eh_kds_status_col--preparing">
+            <div class="o_eh_kds_status_columns" t-att-data-mode="state.statusView">
+                <div t-if="state.statusView === 'both' or state.statusView === 'preparing'"
+                     class="o_eh_kds_status_col o_eh_kds_status_col--preparing">
                     <h2 class="o_eh_kds_status_col_title">
                         Preparing
                         <span class="o_eh_kds_status_count" t-esc="(state.statusData and state.statusData.preparing || []).length"/>
@@ -45,7 +62,8 @@
                     </div>
                 </div>
 
-                <div class="o_eh_kds_status_col o_eh_kds_status_col--ready">
+                <div t-if="state.statusView === 'both' or state.statusView === 'ready'"
+                     class="o_eh_kds_status_col o_eh_kds_status_col--ready">
                     <h2 class="o_eh_kds_status_col_title">
                         Ready for Pickup
                         <span class="o_eh_kds_status_count" t-esc="(state.statusData and state.statusData.ready || []).length"/>

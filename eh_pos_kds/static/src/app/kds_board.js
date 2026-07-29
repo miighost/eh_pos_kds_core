@@ -22,10 +22,12 @@ export class KdsBoard extends Component {
         const boot = readBoot();
         this.token = boot ? boot.token : null;
         this.mode = boot ? (boot.mode || "board") : "board";
+        const savedStatusView = this.token ? (localStorage.getItem("eh_kds_status_view_" + this.token) || "both") : "both";
         this.bus = useService("bus_service");
         this.offline = new OfflineStore(this.token);
         this.state = useState({
             mode: this.mode,
+            statusView: savedStatusView,
             board: { name: boot ? boot.name : "Kitchen", lanes: [] },
             configMissing: !boot,
             cards: [],
@@ -244,6 +246,13 @@ export class KdsBoard extends Component {
     }
 
     // -- derived views -------------------------------------------------------
+
+    setStatusView(mode) {
+        this.state.statusView = mode;
+        if (this.token) {
+            localStorage.setItem("eh_kds_status_view_" + this.token, mode);
+        }
+    }
 
     formatRef(ref) {
         if (!ref) {

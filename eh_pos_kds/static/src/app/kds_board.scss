@@ -317,6 +317,25 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 24px;
+
+        &[data-mode="preparing"],
+        &[data-mode="ready"] {
+            grid-template-columns: 1fr;
+
+            .o_eh_kds_status_grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 20px;
+            }
+
+            .o_eh_kds_status_card {
+                padding: 24px 16px;
+                font-size: 32px;
+
+                &.o_eh_kds_status_card--ready {
+                    font-size: 36px;
+                }
+            }
+        }
     }
 
     .o_eh_kds_status_col {
