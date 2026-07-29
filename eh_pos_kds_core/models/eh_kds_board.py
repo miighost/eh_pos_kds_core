@@ -283,10 +283,14 @@ class EhKdsBoard(models.Model):
 
     def action_open_board(self):
         self.ensure_one()
+        if not self.access_token:
+            self.access_token = uuid.uuid4().hex
         return {"type": "ir.actions.act_url", "url": "/eh_kds/board/%s" % self.access_token, "target": "new"}
 
     def action_open_status(self):
         self.ensure_one()
+        if not self.access_token:
+            self.access_token = uuid.uuid4().hex
         return {"type": "ir.actions.act_url", "url": "/eh_kds/status/%s" % self.access_token, "target": "new"}
 
     # -- sample data ---------------------------------------------------------

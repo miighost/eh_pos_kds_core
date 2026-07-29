@@ -18,6 +18,15 @@ def _boot_blob(token, name):
     return base64.b64encode(json.dumps({"token": token, "name": name}).encode()).decode()
 
 
+def _session_info():
+    IrHttp = request.env["ir.http"]
+    if hasattr(IrHttp, "session_info"):
+        return IrHttp.session_info()
+    if hasattr(IrHttp, "get_frontend_session_info"):
+        return IrHttp.get_frontend_session_info()
+    return {}
+
+
 class EhKdsBoardPage(http.Controller):
     """Serve the kitchen board page for a board access token.
 
@@ -34,7 +43,7 @@ class EhKdsBoardPage(http.Controller):
             raise request.not_found()
         # The token lives only in the brand element boot blob, not in session,
         # so the brand mark is load bearing for the app.
-        session_info = request.env["ir.http"].get_frontend_session_info()
+        session_info = _session_info()
         odoo_json = Markup(
             json.dumps(
                 {
