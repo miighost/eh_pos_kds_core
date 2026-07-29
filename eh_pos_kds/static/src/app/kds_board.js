@@ -245,6 +245,18 @@ export class KdsBoard extends Component {
 
     // -- derived views -------------------------------------------------------
 
+    formatRef(ref) {
+        if (!ref) {
+            return { table: "", number: "" };
+        }
+        const str = String(ref).trim();
+        if (str.startsWith("T") && str.includes(" ")) {
+            const parts = str.split(" ");
+            return { table: parts[0], number: parts.slice(1).join(" ") };
+        }
+        return { table: "", number: str };
+    }
+
     laneById(id) {
         return this.state.board.lanes.find((l) => l.id === id);
     }
