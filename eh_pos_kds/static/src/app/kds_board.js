@@ -256,6 +256,10 @@ export class KdsBoard extends Component {
         }
     }
 
+    isLaneFilterActive(laneId) {
+        return String(this.state.selectedLaneFilter) === String(laneId);
+    }
+
     visibleLanes() {
         const lanes = this.state.board.lanes || [];
         if (!this.state.selectedLaneFilter || this.state.selectedLaneFilter === "all") {

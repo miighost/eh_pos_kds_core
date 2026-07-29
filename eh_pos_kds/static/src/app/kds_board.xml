@@ -96,7 +96,7 @@
                         </button>
                         <t t-foreach="state.board.lanes" t-as="lane" t-key="lane.id">
                             <button class="o_eh_kds_btn"
-                                    t-att-class="{ 'is-active': String(state.selectedLaneFilter) === String(lane.id) }"
+                                    t-att-class="{ 'is-active': isLaneFilterActive(lane.id) }"
                                     t-on-click="() => this.setLaneFilter(lane.id)">
                                 <t t-esc="lane.name"/>
                             </button>
