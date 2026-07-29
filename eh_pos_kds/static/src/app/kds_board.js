@@ -322,9 +322,11 @@ export class KdsBoard extends Component {
             }
         }
         const max = Math.max(1, ...buckets);
-        return buckets.map((count) => {
+        return buckets.map((count, index) => {
+            const minAgo = 11 - index;
+            const label = minAgo === 0 ? "Now" : `-${minAgo}m`;
             const pct = Math.round((100 * count) / max);
-            return { count, pct, h: Math.max(6, pct) };
+            return { index, count, label, pct, h: Math.max(8, pct) };
         });
     }
 

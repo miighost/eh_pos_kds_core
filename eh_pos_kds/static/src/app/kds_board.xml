@@ -148,11 +148,25 @@
 
             <t t-if="state.view === 'allday'">
                 <div class="o_eh_kds_heatmap" t-if="heatmap.length">
-                    <span class="o_eh_kds_heatmap_lbl">Load (last 12 min)</span>
-                    <div class="o_eh_kds_heatmap_bars">
-                        <t t-foreach="heatmap" t-as="b" t-key="b_index">
-                            <span class="o_eh_kds_heatmap_bar" t-attf-style="height: {{ b.h }}%" t-att-title="b.count"/>
-                        </t>
+                    <div class="o_eh_kds_heatmap_header">
+                        <span class="o_eh_kds_heatmap_lbl">⚡ Order Inflow Rate (Last 12 Minutes)</span>
+                        <span class="o_eh_kds_heatmap_sub">Kitchen Rush Heatmap</span>
+                    </div>
+                    <div class="o_eh_kds_heatmap_chart">
+                        <div class="o_eh_kds_heatmap_bars">
+                            <t t-foreach="heatmap" t-as="b" t-key="b.index">
+                                <div class="o_eh_kds_heatmap_col">
+                                    <span class="o_eh_kds_heatmap_val"><t t-if="b.count > 0"><t t-esc="b.count"/></t></span>
+                                    <div class="o_eh_kds_heatmap_bar_track">
+                                        <span class="o_eh_kds_heatmap_bar"
+                                              t-attf-style="height: {{ b.h }}%"
+                                              t-att-class="{ 'has-items': b.count > 0 }"
+                                              t-att-title="b.count + ' items placed ' + b.label"/>
+                                    </div>
+                                    <span class="o_eh_kds_heatmap_axis" t-esc="b.label"/>
+                                </div>
+                            </t>
+                        </div>
                     </div>
                 </div>
                 <div class="o_eh_kds_allday">

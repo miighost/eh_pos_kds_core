@@ -273,29 +273,81 @@
 .o_eh_kds_heatmap {
     background: var(--eh-kds-surface);
     border: 1px solid var(--eh-kds-border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-bottom: 12px;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
 
-    .o_eh_kds_heatmap_lbl {
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--eh-kds-text-muted);
+    .o_eh_kds_heatmap_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .o_eh_kds_heatmap_lbl {
+            font-size: 14px;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+        .o_eh_kds_heatmap_sub {
+            font-size: 12px;
+            color: var(--eh-kds-text-muted);
+            font-family: var(--eh-kds-font-mono);
+        }
     }
+
     .o_eh_kds_heatmap_bars {
         display: flex;
         align-items: flex-end;
-        gap: 4px;
-        height: 48px;
-        margin-top: 6px;
+        gap: 8px;
+        height: 90px;
     }
-    .o_eh_kds_heatmap_bar {
+
+    .o_eh_kds_heatmap_col {
         flex: 1;
-        background: var(--eh-kds-accent-mint);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: flex-end;
+    }
+
+    .o_eh_kds_heatmap_val {
+        font-family: var(--eh-kds-font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--eh-kds-accent-mint);
+        min-height: 16px;
+        margin-bottom: 4px;
+    }
+
+    .o_eh_kds_heatmap_bar_track {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        align-items: flex-end;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .o_eh_kds_heatmap_bar {
+        width: 100%;
+        background: var(--eh-kds-border);
         border-radius: 3px 3px 0 0;
-        min-height: 3px;
-        opacity: 0.85;
+        transition: height 0.3s ease;
+
+        &.has-items {
+            background: linear-gradient(180deg, #34D399, #059669);
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
+        }
+    }
+
+    .o_eh_kds_heatmap_axis {
+        font-family: var(--eh-kds-font-mono);
+        font-size: 11px;
+        color: #9AA8A0;
+        margin-top: 6px;
+        font-weight: 600;
     }
 }
 
