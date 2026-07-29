@@ -49,20 +49,31 @@
 
     .o_eh_kds_lane_head {
         margin: 0;
-        padding: 10px 12px;
-        font-size: 14px;
+        padding: 12px 14px;
+        font-size: 16px;
+        font-weight: 800;
+        color: #FFFFFF !important;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
         border-left: 4px solid var(--eh-kds-accent-mint);
         background: var(--eh-kds-surface-2);
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        span {
+            color: #FFFFFF !important;
+        }
     }
     .o_eh_kds_lane_count {
         font-family: var(--eh-kds-font-mono);
-        color: var(--eh-kds-text-muted);
-        font-size: 12px;
+        color: #FFFFFF !important;
+        background: var(--eh-kds-surface);
+        border: 1px solid var(--eh-kds-border);
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
     }
     .o_eh_kds_lane_body { padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 80px; }
     .o_eh_kds_empty { color: transparent; font-size: 12px; margin: 0; user-select: none; }
