@@ -69,18 +69,30 @@ class PosOrder(models.Model):
 
         touched = self.env["eh.kds.board"].sudo()
         for line in self._eh_kds_routable_lines():
-            item = ticket.item_ids.filtered(lambda i, line=line: i.pos_order_line_uuid == line.uuid)[:1]
-            known = (item.quantity - item.cancelled) if item else 0.0
+            items = ticket.item_ids.filtered(lambda i, line=line: i.pos_order_line_uuid == line.uuid)
+            known = sum(i.quantity - i.cancelled for i in items)
             delta = line.qty - known
             if delta > 0:
                 attr_value_ids = line.product_id.product_template_attribute_value_ids.ids
-                if not item:
+
+                # Check if there is an existing item whose cards are ALL still in the initial lane (Queued) and status 'placed'
+                unbumped_item = False
+                for i in items:
+                    if i.card_ids and all(
+                        c.lane_id == c.board_id.lane_ids[:1] and c.status == "placed" for c in i.card_ids
+                    ):
+                        unbumped_item = i
+                        break
+
+                if unbumped_item:
+                    unbumped_item.quantity += delta
+                else:
                     item = Item.create(
                         dict(
                             {
                                 "ticket_id": ticket.id,
                                 "product_id": line.product_id.id,
-                                "quantity": line.qty,
+                                "quantity": delta,
                                 "pos_order_line_id": line.id,
                                 "pos_order_line_uuid": line.uuid,
                                 "customer_note": getattr(line, "customer_note", False) or getattr(line, "note", False),
@@ -94,14 +106,21 @@ class PosOrder(models.Model):
                         card = Card.create({"item_id": item.id, "lane_id": lane.id})
                         card._log("placed", to_lane=lane, push=False)
                         touched |= board
-                else:
-                    item.quantity = line.qty
-            elif delta < 0 and item:
-                absorbed = min(item.quantity, item.cancelled - delta)
-                item.cancelled = absorbed
-                for card in item.card_ids.filtered(lambda c: c.status != "voided"):
-                    card._log("voided", push=False)
-                    touched |= card.board_id
+            elif delta < 0 and items:
+                remaining_to_cancel = -delta
+                for item in items.sorted("id", reverse=True):
+                    if remaining_to_cancel <= 0:
+                        break
+                    active_qty = item.quantity - item.cancelled
+                    if active_qty <= 0:
+                        continue
+                    cancel_amount = min(active_qty, remaining_to_cancel)
+                    item.cancelled += cancel_amount
+                    remaining_to_cancel -= cancel_amount
+                    if (item.quantity - item.cancelled) <= 0:
+                        for card in item.card_ids.filtered(lambda c: c.status != "voided"):
+                            card._log("voided", push=False)
+                            touched |= card.board_id
 
         for board in touched:
             board._kds_push(
