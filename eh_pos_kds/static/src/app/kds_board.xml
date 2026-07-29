@@ -223,8 +223,7 @@
                                         <div t-if="card.note" class="o_eh_kds_card_note" t-esc="card.note"/>
                                         <div class="o_eh_kds_card_ops">
                                             <button class="o_eh_kds_op" title="Recall to previous stage" t-on-click.stop="() => this.recall(card)">‹</button>
-                                            <button class="o_eh_kds_op o_eh_kds_op--print" title="Print KOT" t-on-click.stop="() => this.printCard(card, false)">🖨️</button>
-                                            <button class="o_eh_kds_op o_eh_kds_op--printbump" title="Print KOT &amp; Advance to next stage" t-on-click.stop="() => this.printCard(card, true)">🖨️+Bump</button>
+                                            <button class="o_eh_kds_op o_eh_kds_op--print" title="Print KOT Ticket" t-on-click.stop="() => this.printCard(card, false)">🖨️</button>
                                             <button class="o_eh_kds_op o_eh_kds_op--bump" t-on-click.stop="() => this.bump(card)">Bump</button>
                                         </div>
                                     </div>
