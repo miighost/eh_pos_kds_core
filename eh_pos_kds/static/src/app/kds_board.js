@@ -23,11 +23,13 @@ export class KdsBoard extends Component {
         this.token = boot ? boot.token : null;
         this.mode = boot ? (boot.mode || "board") : "board";
         const savedStatusView = this.token ? (localStorage.getItem("eh_kds_status_view_" + this.token) || "both") : "both";
+        const savedLaneFilter = this.token ? (localStorage.getItem("eh_kds_lane_filter_" + this.token) || "all") : "all";
         this.bus = useService("bus_service");
         this.offline = new OfflineStore(this.token);
         this.state = useState({
             mode: this.mode,
             statusView: savedStatusView,
+            selectedLaneFilter: savedLaneFilter,
             board: { name: boot ? boot.name : "Kitchen", lanes: [] },
             configMissing: !boot,
             cards: [],
@@ -246,6 +248,22 @@ export class KdsBoard extends Component {
     }
 
     // -- derived views -------------------------------------------------------
+
+    setLaneFilter(laneId) {
+        this.state.selectedLaneFilter = laneId;
+        if (this.token) {
+            localStorage.setItem("eh_kds_lane_filter_" + this.token, String(laneId));
+        }
+    }
+
+    visibleLanes() {
+        const lanes = this.state.board.lanes || [];
+        if (!this.state.selectedLaneFilter || this.state.selectedLaneFilter === "all") {
+            return lanes;
+        }
+        const filtered = lanes.filter((l) => String(l.id) === String(this.state.selectedLaneFilter));
+        return filtered.length ? filtered : lanes;
+    }
 
     setStatusView(mode) {
         this.state.statusView = mode;

@@ -32,6 +32,28 @@
     padding: 3px 10px;
 
     &.is-live { color: var(--eh-kds-ok); border-color: var(--eh-kds-ok); }
+.o_eh_kds_lane_filter_group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--eh-kds-surface-2);
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid var(--eh-kds-border);
+
+    .o_eh_kds_btn {
+        border: none;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 4px 10px;
+
+        &.is-active {
+            background: var(--eh-kds-accent-mint);
+            color: #000000 !important;
+            font-weight: 700;
+        }
+    }
 }
 
 .o_eh_kds_lanes {
@@ -39,6 +61,10 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 12px;
     align-items: start;
+
+    &[data-single="true"] {
+        grid-template-columns: 1fr;
+    }
 }
 
 .o_eh_kds_lane {

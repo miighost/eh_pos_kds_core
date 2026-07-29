@@ -88,6 +88,20 @@
             <header class="o_eh_kds_topbar">
                 <span class="o_eh_kds_title" t-esc="state.board.name"/>
                 <div class="o_eh_kds_actions">
+                    <div class="o_eh_kds_lane_filter_group">
+                        <button class="o_eh_kds_btn"
+                                t-att-class="{ 'is-active': state.selectedLaneFilter === 'all' }"
+                                t-on-click="() => this.setLaneFilter('all')">
+                            All Lanes
+                        </button>
+                        <t t-foreach="state.board.lanes" t-as="lane" t-key="lane.id">
+                            <button class="o_eh_kds_btn"
+                                    t-att-class="{ 'is-active': String(state.selectedLaneFilter) === String(lane.id) }"
+                                    t-on-click="() => this.setLaneFilter(lane.id)">
+                                <t t-esc="lane.name"/>
+                            </button>
+                        </t>
+                    </div>
                     <button class="o_eh_kds_btn"
                             t-att-class="{ 'is-active': state.view === 'allday' }"
                             t-on-click="() => this.state.view = (state.view === 'allday' ? 'lanes' : 'allday')">
@@ -155,8 +169,8 @@
             </t>
 
             <t t-else="">
-                <div class="o_eh_kds_lanes">
-                    <t t-foreach="state.board.lanes" t-as="lane" t-key="lane.id">
+                <div class="o_eh_kds_lanes" t-att-data-single="visibleLanes().length === 1">
+                    <t t-foreach="visibleLanes()" t-as="lane" t-key="lane.id">
                         <section class="o_eh_kds_lane">
                             <h2 class="o_eh_kds_lane_head" t-attf-style="border-color: {{ lane.color }}">
                                 <span t-esc="lane.name"/>
