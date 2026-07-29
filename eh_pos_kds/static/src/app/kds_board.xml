@@ -189,7 +189,7 @@
                             <h2 class="o_eh_kds_lane_head" t-attf-style="border-color: {{ lane.color }}">
                                 <span class="o_eh_kds_lane_head_title">
                                     <span t-esc="lane.name"/>
-                                    <button t-if="isFirstLane(lane.id)"
+                                    <button t-if="state.board.lanes and state.board.lanes.length and lane.id === state.board.lanes[0].id"
                                             class="o_eh_kds_print_btn"
                                             title="Print latest order ticket in this stage"
                                             t-on-click.stop="() => this.printLatestInStage(lane.id)">
@@ -224,7 +224,7 @@
                                         <div t-if="card.note" class="o_eh_kds_card_note" t-esc="card.note"/>
                                         <div class="o_eh_kds_card_ops">
                                             <button class="o_eh_kds_op" title="Recall to previous stage" t-on-click.stop="() => this.recall(card)">‹</button>
-                                            <button t-if="isFirstLane(lane.id)" class="o_eh_kds_op o_eh_kds_op--print" title="Print KOT Ticket" t-on-click.stop="() => this.printCard(card, false)">🖨️</button>
+                                            <button t-if="state.board.lanes and state.board.lanes.length and lane.id === state.board.lanes[0].id" class="o_eh_kds_op o_eh_kds_op--print" title="Print KOT Ticket" t-on-click.stop="() => this.printCard(card, false)">🖨️</button>
                                             <button class="o_eh_kds_op o_eh_kds_op--bump" t-on-click.stop="() => this.bump(card)">Bump</button>
                                         </div>
                                     </div>
