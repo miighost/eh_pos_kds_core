@@ -260,6 +260,20 @@ export class KdsBoard extends Component {
         }, 100);
     }
 
+    isFirstLane(laneId) {
+        const lanes = this.state.board.lanes || [];
+        return lanes.length > 0 && String(lanes[0].id) === String(laneId);
+    }
+
+    printLatestInStage(laneId) {
+        const cards = this.cardsInLane(laneId);
+        if (!cards.length) {
+            return;
+        }
+        const latestCard = cards[cards.length - 1];
+        this.printCard(latestCard, false);
+    }
+
     printStage(laneId) {
         const cards = this.cardsInLane(laneId);
         if (!cards.length) {
