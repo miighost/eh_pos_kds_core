@@ -498,3 +498,102 @@
     color: #FFFFFF !important;
     font-weight: 800;
 }
+
+.o_eh_kds_print_btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+.o_eh_kds_op--print {
+    background: rgba(96, 165, 250, 0.15) !important;
+    border-color: #60A5FA !important;
+    color: #60A5FA !important;
+}
+
+.o_eh_kds_op--printbump {
+    background: rgba(168, 85, 247, 0.15) !important;
+    border-color: #A855F7 !important;
+    color: #A855F7 !important;
+    font-weight: 700;
+}
+
+.o_eh_kds_print_container {
+    display: none;
+}
+
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    .o_eh_kds_print_container,
+    .o_eh_kds_print_container * {
+        visibility: visible !important;
+    }
+    .o_eh_kds_print_container {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm;
+        padding: 0;
+        margin: 0;
+    }
+    .o_eh_kds_kot_receipt {
+        page-break-after: always;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 14px;
+        color: #000000;
+        padding: 10px 0;
+        border-bottom: 2px dashed #000000;
+    }
+    .o_eh_kds_kot_header {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+    .o_eh_kds_kot_title {
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .o_eh_kds_kot_board {
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .o_eh_kds_kot_ref {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 4px 0;
+    }
+    .o_eh_kds_kot_body {
+        margin: 10px 0;
+    }
+    .o_eh_kds_kot_item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 6px 0;
+    }
+    .o_eh_kds_kot_note {
+        font-style: italic;
+        margin-left: 10px;
+        font-size: 13px;
+        color: #333333;
+    }
+    .o_eh_kds_kot_footer {
+        text-align: center;
+        margin-top: 12px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+}

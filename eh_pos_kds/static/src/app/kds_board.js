@@ -30,6 +30,7 @@ export class KdsBoard extends Component {
             mode: this.mode,
             statusView: savedStatusView,
             selectedLaneFilter: savedLaneFilter,
+            printTickets: [],
             board: { name: boot ? boot.name : "Kitchen", lanes: [] },
             configMissing: !boot,
             cards: [],
@@ -248,6 +249,27 @@ export class KdsBoard extends Component {
     }
 
     // -- derived views -------------------------------------------------------
+
+    printCard(card, bumpAfter = false) {
+        this.state.printTickets = [card];
+        setTimeout(() => {
+            window.print();
+            if (bumpAfter) {
+                this.bump(card);
+            }
+        }, 100);
+    }
+
+    printStage(laneId) {
+        const cards = this.cardsInLane(laneId);
+        if (!cards.length) {
+            return;
+        }
+        this.state.printTickets = cards;
+        setTimeout(() => {
+            window.print();
+        }, 100);
+    }
 
     setLaneFilter(laneId) {
         this.state.selectedLaneFilter = laneId;

@@ -187,7 +187,14 @@
                     <t t-foreach="visibleLanes()" t-as="lane" t-key="lane.id">
                         <section class="o_eh_kds_lane">
                             <h2 class="o_eh_kds_lane_head" t-attf-style="border-color: {{ lane.color }}">
-                                <span t-esc="lane.name"/>
+                                <span class="o_eh_kds_lane_head_title">
+                                    <span t-esc="lane.name"/>
+                                    <button class="o_eh_kds_print_btn"
+                                            title="Print KOT for all orders in this stage"
+                                            t-on-click.stop="() => this.printStage(lane.id)">
+                                        🖨️
+                                    </button>
+                                </span>
                                 <span class="o_eh_kds_lane_count" t-esc="cardsInLane(lane.id).length"/>
                             </h2>
                             <div class="o_eh_kds_lane_body">
@@ -215,7 +222,9 @@
                                         </div>
                                         <div t-if="card.note" class="o_eh_kds_card_note" t-esc="card.note"/>
                                         <div class="o_eh_kds_card_ops">
-                                            <button class="o_eh_kds_op" t-on-click.stop="() => this.recall(card)">‹</button>
+                                            <button class="o_eh_kds_op" title="Recall to previous stage" t-on-click.stop="() => this.recall(card)">‹</button>
+                                            <button class="o_eh_kds_op o_eh_kds_op--print" title="Print KOT" t-on-click.stop="() => this.printCard(card, false)">🖨️</button>
+                                            <button class="o_eh_kds_op o_eh_kds_op--printbump" title="Print KOT &amp; Advance to next stage" t-on-click.stop="() => this.printCard(card, true)">🖨️+Bump</button>
                                             <button class="o_eh_kds_op o_eh_kds_op--bump" t-on-click.stop="() => this.bump(card)">Bump</button>
                                         </div>
                                     </div>
@@ -223,6 +232,35 @@
                             </div>
                         </section>
                     </t>
+                </div>
+            </t>
+        </div>
+
+        <!-- Printable KOT Receipt Container -->
+        <div class="o_eh_kds_print_container">
+            <t t-foreach="state.printTickets" t-as="pcard" t-key="pcard.id">
+                <div class="o_eh_kds_kot_receipt">
+                    <div class="o_eh_kds_kot_header">
+                        <div class="o_eh_kds_kot_title">KITCHEN ORDER TICKET (KOT)</div>
+                        <div class="o_eh_kds_kot_board" t-esc="state.board.name"/>
+                        <div class="o_eh_kds_kot_ref">
+                            <t t-set="kref" t-value="formatRef(pcard.ticket_ref)"/>
+                            <t t-if="kref.table">Table: <t t-esc="kref.table"/> | </t>
+                            Order Ref: <t t-esc="kref.number"/>
+                        </div>
+                    </div>
+                    <div class="o_eh_kds_kot_body">
+                        <div class="o_eh_kds_kot_item">
+                            <span class="o_eh_kds_kot_qty" t-esc="pcard.qty + 'x'"/>
+                            <span class="o_eh_kds_kot_name" t-esc="pcard.product"/>
+                        </div>
+                        <div t-if="pcard.note" class="o_eh_kds_kot_note">
+                            Note: <t t-esc="pcard.note"/>
+                        </div>
+                    </div>
+                    <div class="o_eh_kds_kot_footer">
+                        --- MiiG KDS ---
+                    </div>
                 </div>
             </t>
         </div>
