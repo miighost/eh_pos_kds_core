@@ -19,7 +19,7 @@
  */
 
 export const BRAND_OWNER = "erpheritage.com.au";
-export const BRAND_MARK = "ERP Heritage";
+export const BRAND_MARK = "MiiG";
 
 export function brandElement() {
     return document.querySelector(`[data-brand-owner="${BRAND_OWNER}"]`);

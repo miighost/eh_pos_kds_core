@@ -41,7 +41,7 @@ def _ensure_partner(env):
         [('code', '=', 'VIC'), ('country_id', '=', country.id)], limit=1,
     ) if country else env['res.country.state'].browse()
     vals = {
-        'name': 'ERP Heritage – Your Odoo Partner',
+        'name': 'MiiG – Your Odoo Partner',
         'is_company': True,
         'website': 'https://www.erpheritage.com.au',
         'email': 'info@erpheritage.com.au',

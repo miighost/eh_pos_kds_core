@@ -17,7 +17,7 @@
             </head>
             <body class="o_eh_kds_page">
                 <div t-attf-class="o_eh_kds_brand o_eh_kds_brand--{{ brand_pos }}" t-att-data-brand-owner="brand['owner']" t-att-data-eh-boot="boot">
-                    <img class="o_eh_kds_brand_logo" t-att-src="brand['logo']" alt="ERP Heritage"/>
+                    <img class="o_eh_kds_brand_logo" t-att-src="brand['logo']" alt="MiiG"/>
                     <span class="o_eh_kds_brand_name" t-esc="brand['company']"/>
                 </div>
                 <div class="o_eh_kds_root"/>

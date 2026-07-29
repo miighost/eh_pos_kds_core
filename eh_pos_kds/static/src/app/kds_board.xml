@@ -3,7 +3,7 @@
     <t t-name="eh_pos_kds.KdsBoard">
         <div t-if="state.configMissing" class="o_eh_kds_config_missing">
             <p>Display configuration missing.</p>
-            <p class="o_eh_kds_config_hint">The ERP Heritage brand element carries this board's configuration. Restore it to load the board.</p>
+            <p class="o_eh_kds_config_hint">The MiiG brand element carries this board's configuration. Restore it to load the board.</p>
         </div>
         <div t-else="" class="o_eh_kds_board" t-att-data-layout="state.board.layout_mode">
             <header class="o_eh_kds_topbar">

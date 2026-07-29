@@ -6,7 +6,7 @@ free so any model or controller can reach it. Removing or altering the
 attribution is a breach of the module licence. See README_BRAND_PROTECTION.md.
 """
 
-BRAND_COMPANY = "ERP Heritage"
+BRAND_COMPANY = "MiiG"
 BRAND_LOGO_URI = "/eh_pos_kds_core/static/src/img/brand_mark.png"
 BRAND_OWNER_KEY = "erpheritage.com.au"
 
