@@ -261,3 +261,111 @@
         opacity: 0.85;
     }
 }
+
+.o_eh_kds_status_screen {
+    padding: 24px;
+
+    .o_eh_kds_status_badge {
+        font-family: var(--eh-kds-font-mono);
+        font-size: 13px;
+        letter-spacing: 2px;
+        color: var(--eh-kds-accent-mint);
+        background: rgba(123, 206, 160, 0.15);
+        border: 1px solid var(--eh-kds-accent-mint);
+        border-radius: 999px;
+        padding: 4px 14px;
+        font-weight: 700;
+    }
+
+    .o_eh_kds_now_serving_banner {
+        background: linear-gradient(135deg, rgba(52, 211, 153, 0.25), rgba(16, 24, 20, 0.9));
+        border: 2px solid var(--eh-kds-ok);
+        border-radius: 16px;
+        padding: 16px 24px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .o_eh_kds_serving_lbl {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: var(--eh-kds-ok);
+        }
+
+        .o_eh_kds_serving_ref {
+            font-family: var(--eh-kds-font-mono);
+            font-size: 36px;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+    }
+
+    .o_eh_kds_status_columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+
+    .o_eh_kds_status_col {
+        background: var(--eh-kds-surface);
+        border: 1px solid var(--eh-kds-border);
+        border-radius: 16px;
+        padding: 20px;
+        min-height: 500px;
+    }
+
+    .o_eh_kds_status_col_title {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0 0 20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--eh-kds-border);
+
+        .o_eh_kds_status_count {
+            background: var(--eh-kds-surface-2);
+            padding: 2px 12px;
+            border-radius: 999px;
+            font-size: 16px;
+            font-family: var(--eh-kds-font-mono);
+        }
+    }
+
+    .o_eh_kds_status_col--ready .o_eh_kds_status_col_title {
+        color: var(--eh-kds-ok);
+        border-color: var(--eh-kds-ok);
+    }
+
+    .o_eh_kds_status_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 14px;
+    }
+
+    .o_eh_kds_status_card {
+        padding: 16px 12px;
+        border-radius: 12px;
+        text-align: center;
+        font-family: var(--eh-kds-font-mono);
+        font-size: 24px;
+        font-weight: 800;
+        background: var(--eh-kds-surface-2);
+        border: 1px solid var(--eh-kds-border);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+
+        &.o_eh_kds_status_card--ready {
+            background: rgba(52, 211, 153, 0.15);
+            border-color: var(--eh-kds-ok);
+            color: var(--eh-kds-ok);
+            font-size: 28px;
+        }
+
+        &.o_eh_kds_status_card--prep {
+            color: var(--eh-kds-text);
+        }
+    }
+}

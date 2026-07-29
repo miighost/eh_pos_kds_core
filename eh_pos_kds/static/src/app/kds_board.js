@@ -21,12 +21,15 @@ export class KdsBoard extends Component {
         // the attribution is load bearing.
         const boot = readBoot();
         this.token = boot ? boot.token : null;
+        this.mode = boot ? (boot.mode || "board") : "board";
         this.bus = useService("bus_service");
         this.offline = new OfflineStore(this.token);
         this.state = useState({
+            mode: this.mode,
             board: { name: boot ? boot.name : "Kitchen", lanes: [] },
             configMissing: !boot,
             cards: [],
+            statusData: null,
             paperOut: [],
             connected: false,
             offline: false,
@@ -76,6 +79,20 @@ export class KdsBoard extends Component {
     // -- data ----------------------------------------------------------------
 
     async load() {
+        if (this.state.mode === "status") {
+            try {
+                const data = await rpc("/eh_kds/status/data", { token: this.token });
+                this.state.board = data.board;
+                this.state.statusData = data;
+                this.serverOffset = this._parse(data.server_time) - this._clientNow();
+                this.state.offline = false;
+                this.state.lastSync = new Date();
+            } catch {
+                this.state.offline = true;
+            }
+            return;
+        }
+
         try {
             const data = await rpc("/eh_kds/board/data", { token: this.token });
             this.state.board = data.board;
@@ -105,6 +122,7 @@ export class KdsBoard extends Component {
         this.bus.addChannel(this.token);
         this.bus.subscribe("kds.card", (payload) => this.onCardEvent(payload));
         this.bus.subscribe("kds.ticket", () => this.load());
+        this.bus.subscribe("kds.status", () => this.load());
         this.bus.subscribe("kds.paper", (payload) => {
             this.state.paperOut = (payload && payload.stations) || [];
         });

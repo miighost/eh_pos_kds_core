@@ -11,11 +11,11 @@ from markupsafe import Markup
 from odoo.addons.eh_pos_kds_core.utils.brand import brand_anchor, brand_position
 
 
-def _boot_blob(token, name):
+def _boot_blob(token, name, mode="board"):
     """The display boot config, carried only inside the brand element so the
     attribution is load bearing: remove it and the app has no token to load.
     """
-    return base64.b64encode(json.dumps({"token": token, "name": name}).encode()).decode()
+    return base64.b64encode(json.dumps({"token": token, "name": name, "mode": mode}).encode()).decode()
 
 
 def _session_info():
@@ -59,7 +59,7 @@ class EhKdsBoardPage(http.Controller):
                 "odoo_json": odoo_json,
                 "brand": brand_anchor(),
                 "brand_pos": brand_position(request.env),
-                "boot": _boot_blob(board.access_token, board.name),
+                "boot": _boot_blob(board.access_token, board.name, mode="board"),
             },
         )
 
@@ -74,7 +74,26 @@ class EhKdsBoardPage(http.Controller):
     @http.route("/eh_kds/status/<token>", auth="public", type="http", website=False)
     def status_page(self, token, **kw):
         """Serve the public order status page."""
-        return self.board_page(token, **kw)
+        board = self._board(token)
+        session_info = _session_info()
+        odoo_json = Markup(
+            json.dumps(
+                {
+                    "csrf_token": request.csrf_token(None),
+                    "__session_info__": session_info,
+                }
+            )
+        )
+        return request.render(
+            "eh_pos_kds.board_index",
+            {
+                "session_info": session_info,
+                "odoo_json": odoo_json,
+                "brand": brand_anchor(),
+                "brand_pos": brand_position(request.env),
+                "boot": _boot_blob(board.access_token, board.name, mode="status"),
+            },
+        )
 
     @http.route("/eh_kds/board/data", auth="public", type="jsonrpc")
     def board_data(self, token, **kw):
