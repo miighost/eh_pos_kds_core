@@ -89,15 +89,15 @@
                 <div class="o_eh_kds_kpi"><span class="o_eh_kds_kpi_val" t-esc="state.stats.queue_depth"/><span class="o_eh_kds_kpi_lbl">In queue</span></div>
                 <div class="o_eh_kds_kpi"><span class="o_eh_kds_kpi_val" t-esc="state.stats.completed"/><span class="o_eh_kds_kpi_lbl">Completed</span></div>
                 <div class="o_eh_kds_kpi">
-                    <span class="o_eh_kds_kpi_val"><t t-if="state.stats.samples >= 3"><t t-esc="state.stats.avg_minutes"/>m</t><t t-else="">...</t></span>
+                    <span class="o_eh_kds_kpi_val"><t t-esc="state.stats.avg_minutes"/>m</span>
                     <span class="o_eh_kds_kpi_lbl">Avg prep</span>
                 </div>
                 <div class="o_eh_kds_kpi">
-                    <span class="o_eh_kds_kpi_val"><t t-if="state.stats.samples >= 3"><t t-esc="state.stats.p95_minutes"/>m</t><t t-else="">...</t></span>
+                    <span class="o_eh_kds_kpi_val"><t t-esc="state.stats.p95_minutes"/>m</span>
                     <span class="o_eh_kds_kpi_lbl">p95 prep</span>
                 </div>
                 <div class="o_eh_kds_kpi"><span class="o_eh_kds_kpi_val" t-esc="state.stats.void_rate + '%'"/><span class="o_eh_kds_kpi_lbl">Void rate</span></div>
-                <div class="o_eh_kds_kpi o_eh_kds_kpi--wide" t-if="state.stats.bottleneck">
+                <div class="o_eh_kds_kpi o_eh_kds_kpi--wide">
                     <span class="o_eh_kds_kpi_val" t-esc="state.stats.bottleneck"/><span class="o_eh_kds_kpi_lbl">Bottleneck</span>
                 </div>
             </div>

@@ -252,19 +252,24 @@ class EhKdsBoard(models.Model):
         done = cards.ticket_id.filtered(lambda t: t.completion_time and t.completion_time > 0)
         comps = sorted(done.mapped("completion_time"))
 
-        avg = round(sum(comps) / len(comps), 1) if comps else 0
-        p95 = comps[min(len(comps) - 1, max(0, int(round(0.95 * len(comps))) - 1))] if comps else 0
+        avg = round(sum(comps) / len(comps), 1) if comps else 0.0
+        p95 = comps[min(len(comps) - 1, max(0, int(round(0.95 * len(comps))) - 1))] if comps else 0.0
 
-        last_index = len(lanes) - 1
+        last_index = len(lanes) - 1 if lanes else 0
         queue = open_cards.filtered(lambda c: c.lane_id in lanes and lanes.index(c.lane_id) < last_index)
 
         per_lane = []
-        bottleneck = None
+        bottleneck_name = "None"
+        max_open = -1
         for lane in lanes:
             count = len(open_cards.filtered(lambda c: c.lane_id == lane))
             per_lane.append({"id": lane.id, "name": lane.name, "open": count})
-            if bottleneck is None or count > bottleneck["open"]:
-                bottleneck = {"name": lane.name, "open": count}
+            if count > max_open:
+                max_open = count
+                bottleneck_name = lane.name
+
+        if max_open <= 0:
+            bottleneck_name = "None"
 
         return {
             "completed": len(done),
@@ -274,7 +279,7 @@ class EhKdsBoard(models.Model):
             "void_count": len(voided),
             "void_rate": round(100.0 * len(voided) / (len(cards) or 1), 1),
             "per_lane": per_lane,
-            "bottleneck": bottleneck["name"] if bottleneck and bottleneck["open"] else "",
+            "bottleneck": bottleneck_name,
             "samples": len(comps),
             "server_time": fields.Datetime.now().isoformat(),
         }
