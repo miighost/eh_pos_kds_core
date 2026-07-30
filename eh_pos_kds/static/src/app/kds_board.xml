@@ -9,7 +9,7 @@
             <header class="o_eh_kds_topbar">
                 <div class="o_eh_kds_title_wrap">
                     <span class="o_eh_kds_title" t-esc="state.board.name"/>
-                    <span t-if="state.board and state.board.data_scope and state.board.data_scope !== 'all'" class="o_eh_kds_scope_badge" t-esc="dataScopeLabel()"/>
+                    <span t-if="state.board and state.board.data_scope" class="o_eh_kds_scope_badge" t-esc="dataScopeLabel()"/>
                 </div>
                 <div class="o_eh_kds_actions">
                     <button class="o_eh_kds_btn"
@@ -91,7 +91,7 @@
             <header class="o_eh_kds_topbar">
                 <div class="o_eh_kds_title_wrap">
                     <span class="o_eh_kds_title" t-esc="state.board.name"/>
-                    <span t-if="state.board and state.board.data_scope and state.board.data_scope !== 'all'" class="o_eh_kds_scope_badge" t-esc="dataScopeLabel()"/>
+                    <span t-if="state.board and state.board.data_scope" class="o_eh_kds_scope_badge" t-esc="dataScopeLabel()"/>
                 </div>
                 <div class="o_eh_kds_actions">
                     <div class="o_eh_kds_lane_filter_group">
