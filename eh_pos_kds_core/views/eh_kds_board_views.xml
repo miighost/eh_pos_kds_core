@@ -34,6 +34,7 @@
                     <group>
                         <group>
                             <field name="layout_mode"/>
+                            <field name="data_scope"/>
                             <field name="is_expo"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>

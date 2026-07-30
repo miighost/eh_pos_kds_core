@@ -53,6 +53,17 @@ class EhKdsBoard(models.Model):
         default="dual",
         required=True,
     )
+    data_scope = fields.Selection(
+        [
+            ("all", "All Active Orders"),
+            ("session", "Current Open POS Session Only"),
+            ("today", "Today's Orders Only"),
+        ],
+        string="Data Scope",
+        default="all",
+        required=True,
+        help="Control which order cards appear on this board: All active orders, current open POS session, or today's orders only.",
+    )
     is_expo = fields.Boolean(
         string="Expo / All day board",
         help="An expo board aggregates items across every open ticket.",
@@ -154,15 +165,27 @@ class EhKdsBoard(models.Model):
 
     # -- data builders for the display pages ---------------------------------
 
+    def _card_scope_domain(self):
+        self.ensure_one()
+        domain = [("board_id", "=", self.id)]
+        if self.data_scope == "session":
+            open_sessions = self.env["pos.session"].sudo().search([("state", "=", "opened")])
+            domain.append(("ticket_id.pos_order_id.session_id", "in", open_sessions.ids))
+        elif self.data_scope == "today":
+            today_start = fields.Datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            domain.append(("placed_at", ">=", today_start))
+        return domain
+
     def _kds_board_data(self):
         self.ensure_one()
-        cards = self.env["eh.kds.card"].sudo().search([("board_id", "=", self.id)])
+        cards = self.env["eh.kds.card"].sudo().search(self._card_scope_domain())
         open_cards = cards.filtered(lambda c: c.status != "voided")
         return {
             "board": {
                 "id": self.id,
                 "name": self.name,
                 "layout_mode": self.layout_mode,
+                "data_scope": self.data_scope,
                 "lanes": [
                     {
                         "id": lane.id,
@@ -188,7 +211,7 @@ class EhKdsBoard(models.Model):
 
     def _recent_completions(self):
         self.ensure_one()
-        cards = self.env["eh.kds.card"].sudo().search([("board_id", "=", self.id)])
+        cards = self.env["eh.kds.card"].sudo().search(self._card_scope_domain())
         tickets = cards.ticket_id.filtered(lambda t: t.completion_time and t.completion_time > 0)
         tickets = tickets.sorted("id", reverse=True)[:10]
         return tickets.mapped("completion_time")
@@ -204,7 +227,7 @@ class EhKdsBoard(models.Model):
 
     def _kds_status_data(self):
         self.ensure_one()
-        cards = self.env["eh.kds.card"].sudo().search([("board_id", "=", self.id)])
+        cards = self.env["eh.kds.card"].sudo().search(self._card_scope_domain())
         open_cards = cards.filtered(lambda c: c.status != "voided")
         lanes = list(self.lane_ids)
         eta = self._eta_seconds()
@@ -230,7 +253,7 @@ class EhKdsBoard(models.Model):
         ready_raw.sort(key=lambda r: r["seq"], reverse=True)
         ready = [{"ref": r["ref"], "ticket_id": r["ticket_id"]} for r in ready_raw]
         return {
-            "board": {"id": self.id, "name": self.name, "layout_mode": self.layout_mode},
+            "board": {"id": self.id, "name": self.name, "layout_mode": self.layout_mode, "data_scope": self.data_scope},
             "now_serving": ready_raw[0]["ref"] if ready_raw else "",
             "preparing": preparing,
             "ready": ready,
@@ -246,7 +269,7 @@ class EhKdsBoard(models.Model):
         """
         self.ensure_one()
         lanes = list(self.lane_ids)
-        cards = self.env["eh.kds.card"].sudo().search([("board_id", "=", self.id)])
+        cards = self.env["eh.kds.card"].sudo().search(self._card_scope_domain())
         open_cards = cards.filtered(lambda c: c.status != "voided")
         voided = cards.filtered(lambda c: c.status == "voided")
         done = cards.ticket_id.filtered(lambda t: t.completion_time and t.completion_time > 0)

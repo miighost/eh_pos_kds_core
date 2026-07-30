@@ -6,7 +6,23 @@
     justify-content: space-between;
     margin-bottom: 14px;
 
+    .o_eh_kds_title_wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
     .o_eh_kds_title { font-size: 22px; font-weight: 700; }
+    .o_eh_kds_scope_badge {
+        font-family: var(--eh-kds-font-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        background: rgba(96, 165, 250, 0.15);
+        border: 1px solid #60A5FA;
+        color: #60A5FA;
+        padding: 2px 8px;
+        border-radius: 6px;
+    }
     .o_eh_kds_actions { display: flex; align-items: center; gap: 10px; }
 }
 

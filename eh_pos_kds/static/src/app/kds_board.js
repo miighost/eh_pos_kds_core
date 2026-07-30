@@ -250,6 +250,17 @@ export class KdsBoard extends Component {
 
     // -- derived views -------------------------------------------------------
 
+    dataScopeLabel() {
+        const scope = this.state.board ? this.state.board.data_scope : "all";
+        if (scope === "session") {
+            return "POS SESSION";
+        }
+        if (scope === "today") {
+            return "TODAY";
+        }
+        return "ALL ORDERS";
+    }
+
     printCard(card, bumpAfter = false) {
         this.state.printTickets = [card];
         setTimeout(() => {
