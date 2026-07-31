@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="ss_print_pos_kitchen_receipt.KitchenReceipt">
+        <div class="pos-receipt p-1" style="font-family: monospace; max-width: 300px; margin: 0 auto; color: #000;">
+            <!-- Header -->
+            <div class="pos-receipt-header text-center">
+                <div style="font-size: 240%; font-weight: 900; letter-spacing: 2px; margin-bottom: 2px;">
+                    KOT
+                </div>
+                <div t-if="props.data.is_addition" style="font-size: 110%; font-weight: bold; background-color: #000; color: #fff; padding: 2px 5px; margin-bottom: 4px; display: inline-block;">
+                    *** NEW ADDITION ***
+                </div>
+
+                <div t-if="props.data.table_name" style="font-size: 150%; font-weight: bold; margin: 3px 0; border-bottom: 2px solid #000; padding-bottom: 2px;">
+                    TABLE: <span t-esc="props.data.table_name"/>
+                    <t t-if="props.data.floor_name"> (<t t-esc="props.data.floor_name"/>)</t>
+                </div>
+
+                <div class="d-flex justify-content-between" style="font-size: 85%; margin-top: 4px;">
+                    <span>Order: <strong t-esc="props.data.name"/></span>
+                    <span t-esc="props.data.date"/>
+                </div>
+                <div t-if="props.data.cashier" class="text-start" style="font-size: 85%;">
+                    Server: <span t-esc="props.data.cashier"/>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 2px dashed #000; margin: 6px 0;"/>
+
+            <!-- NEW ITEMS SECTION (Large & Extra Bold) -->
+            <div t-if="props.data.new_lines &amp;&amp; props.data.new_lines.length > 0" class="pos-receipt-body mb-2">
+                <div style="font-weight: 900; font-size: 125%; margin-bottom: 4px; background-color: #000; color: #fff; text-align: center; padding: 2px 0;">
+                    🔥 NEW ITEMS
+                </div>
+                <div t-foreach="props.data.new_lines" t-as="line" t-key="line_index" style="font-size: 120%; margin: 6px 0; padding-bottom: 4px; border-bottom: 1px dotted #000;">
+                    <div class="d-flex align-items-baseline">
+                        <strong class="me-2" style="font-size: 140%; font-weight: 900; min-width: 38px;" t-esc="line.qty + 'x'"/>
+                        <strong style="font-size: 130%; font-weight: 900;" t-esc="line.product_name"/>
+                        <span style="font-size: 80%; font-weight: 900; background-color: #000; color: #fff; padding: 1px 5px; border-radius: 3px; margin-left: 6px;">
+                            NEW
+                        </span>
+                    </div>
+                    <div t-if="line.attribute_values" style="font-size: 90%; font-weight: bold; margin-left: 38px; color: #000;">
+                        <t t-esc="line.attribute_values"/>
+                    </div>
+                    <div t-if="line.note" style="font-size: 95%; margin-left: 38px; font-weight: 900; color: #000; margin-top: 2px;">
+                        📌 Note: <t t-esc="line.note"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PREVIOUSLY SENT SECTION (Separated below) -->
+            <div t-if="props.data.sent_lines &amp;&amp; props.data.sent_lines.length > 0" class="pos-receipt-body mt-2">
+                <div style="font-weight: bold; font-size: 100%; margin-bottom: 4px; border-bottom: 1px solid #666; color: #555; text-align: center;">
+                    --- PREVIOUSLY SENT ---
+                </div>
+                <div t-foreach="props.data.sent_lines" t-as="line" t-key="line_index" style="font-size: 95%; margin: 4px 0; color: #555;">
+                    <div class="d-flex align-items-baseline">
+                        <span class="me-2" style="min-width: 35px;" t-esc="line.qty + 'x'"/>
+                        <span t-esc="line.product_name"/>
+                        <span style="font-size: 75%; font-style: italic; color: #777; margin-left: 6px;">
+                            (Sent)
+                        </span>
+                    </div>
+                    <div t-if="line.attribute_values" style="font-size: 80%; margin-left: 35px; color: #666;">
+                        <t t-esc="line.attribute_values"/>
+                    </div>
+                    <div t-if="line.note" style="font-size: 85%; margin-left: 35px; font-style: italic; color: #555;">
+                        Note: <t t-esc="line.note"/>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 2px dashed #000; margin: 6px 0;"/>
+
+            <!-- General Order Note -->
+            <div t-if="props.data.general_note" class="pos-receipt-footer" style="font-size: 100%; margin-top: 4px;">
+                <div style="font-weight: bold;">ORDER NOTE:</div>
+                <div t-esc="props.data.general_note" style="font-weight: bold; font-style: italic;"/>
+                <hr style="border: none; border-top: 2px dashed #000; margin: 6px 0;"/>
+            </div>
+
+            <!-- Footer -->
+            <div class="pos-receipt-footer text-center" style="font-size: 80%; font-weight: bold; margin-top: 4px;">
+                *** END OF KOT ***
+            </div>
+        </div>
+    </t>
+
+</templates>
