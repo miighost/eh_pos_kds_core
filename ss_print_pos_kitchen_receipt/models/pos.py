@@ -6,7 +6,7 @@ from odoo import models, fields, api
 class PosConfig(models.Model):
     _inherit = 'pos.config'
 
-    kitchen_print = fields.Boolean(string='Enable kitchen receipt Printing Button', default=False)
+    kitchen_print = fields.Boolean(string='Enable kitchen receipt Printing Button', default=True)
     kitchen_print_auto = fields.Boolean(string='Automatic kitchen receipt Printing', default=False)
 
     @api.onchange('module_pos_restaurant')

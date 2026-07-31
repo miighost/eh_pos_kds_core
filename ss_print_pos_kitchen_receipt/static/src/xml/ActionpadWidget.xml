@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- Add Order button directly to ActionpadWidget main POS screen -->
+    <t t-name="ss_print_pos_kitchen_receipt.ActionpadWidget" t-inherit="point_of_sale.ActionpadWidget" t-inherit-mode="extension">
+        <xpath expr="//*[contains(@class, 'actionpad') or contains(@class, 'pads') or self::div][1]" position="inside">
+            <button class="button btn btn-primary btn-lg w-100 py-3 mt-1 order-kitchen-button"
+                    style="background-color: #28a745 !important; border-color: #28a745 !important; color: #ffffff !important; font-weight: bold; font-size: 16px;"
+                    t-on-click="() => this.pos.sendOrderAndReturnToTables()">
+                <i class="fa fa-paper-plane me-1"/> Order
+            </button>
+        </xpath>
+    </t>
+
+</templates>
