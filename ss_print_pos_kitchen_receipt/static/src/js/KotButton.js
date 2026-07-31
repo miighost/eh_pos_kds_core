@@ -42,6 +42,37 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
     }
 }
 
+async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
+    const pos = posStore;
+    if (!pos) {
+        return;
+    }
+    const order = currentOrder || pos.get_order();
+    if (!order) {
+        return;
+    }
+    const lines = order.getOrderlines ? order.getOrderlines() : (order.orderlines || []);
+    if (lines.length === 0) {
+        return;
+    }
+
+    if (pos.sendOrderInPreparation) {
+        try {
+            await pos.sendOrderInPreparation(order);
+        } catch (_e) {
+            // ignore if not configured
+        }
+    }
+
+    if (pos.config && pos.config.module_pos_restaurant && pos.showScreen) {
+        try {
+            pos.showScreen("FloorScreen");
+        } catch (_e) {
+            // fallback if FloorScreen not loaded
+        }
+    }
+}
+
 patch(ProductScreen.prototype, {
     setup() {
         super.setup();
@@ -49,10 +80,19 @@ patch(ProductScreen.prototype, {
             this.pos.printKitchenReceipt = (order) =>
                 doPrintKitchenReceipt(this.pos, order || this.currentOrder || this.pos.get_order());
         }
+        if (this.pos && !this.pos.sendOrderAndReturnToTables) {
+            this.pos.sendOrderAndReturnToTables = (order) =>
+                doSendOrderToKitchenAndReturnToTables(this.pos, order || this.currentOrder || this.pos.get_order());
+        }
     },
 
     async printKitchenReceipt() {
         const order = this.currentOrder || this.pos?.get_order();
         await doPrintKitchenReceipt(this.pos, order);
+    },
+
+    async sendOrderAndReturnToTables() {
+        const order = this.currentOrder || this.pos?.get_order();
+        await doSendOrderToKitchenAndReturnToTables(this.pos, order);
     },
 });

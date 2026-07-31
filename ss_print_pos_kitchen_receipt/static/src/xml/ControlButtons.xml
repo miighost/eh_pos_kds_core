@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-    <!-- Add KOT button inside ControlButtons container -->
+    <!-- Add Order and KOT buttons inside ControlButtons container -->
     <t t-name="ss_print_pos_kitchen_receipt.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
         <xpath expr="//div[1]" position="inside">
+            <button class="button btn btn-primary btn-lg flex-fill py-3 me-1 order-kitchen-button" t-on-click="() => this.pos.sendOrderAndReturnToTables()">
+                <i class="fa fa-paper-plane me-1"/> Order
+            </button>
             <button class="button btn btn-secondary btn-lg flex-fill py-3 me-1 kot-button" t-on-click="() => this.pos.printKitchenReceipt()">
                 <i class="fa fa-cutlery me-1"/> KOT
             </button>
