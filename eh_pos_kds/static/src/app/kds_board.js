@@ -146,7 +146,7 @@ export class KdsBoard extends Component {
         if (idx >= 0 && cards[idx].event_id > payload.event_id) {
             return; // stale echo, a newer event already applied
         }
-        if (payload.status === "voided") {
+        if (payload.status === "voided" || !payload.lane_id || payload.lane_index < 0) {
             if (idx >= 0) {
                 cards.splice(idx, 1);
             }
@@ -185,7 +185,7 @@ export class KdsBoard extends Component {
     }
 
     _applyLocal(action, cardIds, extra) {
-        const lanes = this.state.board.lanes;
+        const lanes = this.state.board.lanes || [];
         for (const id of cardIds) {
             const card = this.state.cards.find((c) => c.id === id);
             if (!card) {
@@ -195,9 +195,15 @@ export class KdsBoard extends Component {
                 const i = this.state.cards.indexOf(card);
                 this.state.cards.splice(i, 1);
             } else if (action === "move" && extra.to_index !== undefined) {
-                const t = Math.max(0, Math.min(lanes.length - 1, extra.to_index));
-                card.lane_index = t;
-                card.lane_id = lanes[t] ? lanes[t].id : card.lane_id;
+                const t = extra.to_index;
+                if (t >= lanes.length) {
+                    const i = this.state.cards.indexOf(card);
+                    this.state.cards.splice(i, 1);
+                } else {
+                    const clamped = Math.max(0, t);
+                    card.lane_index = clamped;
+                    card.lane_id = lanes[clamped] ? lanes[clamped].id : card.lane_id;
+                }
             }
         }
     }

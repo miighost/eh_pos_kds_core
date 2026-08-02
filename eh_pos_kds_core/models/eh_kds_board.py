@@ -179,7 +179,7 @@ class EhKdsBoard(models.Model):
     def _kds_board_data(self):
         self.ensure_one()
         cards = self.env["eh.kds.card"].sudo().search(self._card_scope_domain())
-        open_cards = cards.filtered(lambda c: c.status != "voided")
+        open_cards = cards.filtered(lambda c: c.status != "voided" and c.lane_id)
         return {
             "board": {
                 "id": self.id,
@@ -228,7 +228,7 @@ class EhKdsBoard(models.Model):
     def _kds_status_data(self):
         self.ensure_one()
         cards = self.env["eh.kds.card"].sudo().search(self._card_scope_domain())
-        open_cards = cards.filtered(lambda c: c.status != "voided")
+        open_cards = cards.filtered(lambda c: c.status != "voided" and c.lane_id)
         lanes = list(self.lane_ids)
         eta = self._eta_seconds()
         by_ticket = {}

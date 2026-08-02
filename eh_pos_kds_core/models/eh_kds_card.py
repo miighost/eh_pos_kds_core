@@ -65,15 +65,24 @@ class EhKdsCard(models.Model):
         Absolute (not relative) so an offline replay converges: re applying the
         same target is a no op, which keeps a queued bump idempotent. Marks the
         ticket ready and stamps completion the first time every card reaches the
-        ready lane.
+        ready lane. Bumping past the final lane clears the card off the board.
         """
         for card in self:
             order = list(card.board_id.lane_ids)
             if not order:
                 continue
-            target = max(0, min(len(order) - 1, int(index)))
-            current = order.index(card.lane_id)
-            if target == current:
+            current = order.index(card.lane_id) if card.lane_id in order else 0
+            target = int(index)
+            if target >= len(order):
+                from_lane = card.lane_id
+                card.lane_id = False
+                card._log("bumped", from_lane=from_lane, to_lane=False, push=False)
+                card._push()
+                card.ticket_id._maybe_mark_ready()
+                continue
+            if target < 0:
+                target = 0
+            if target == current and card.lane_id:
                 continue
             from_lane = card.lane_id
             card.lane_id = order[target]
@@ -101,6 +110,8 @@ class EhKdsCard(models.Model):
     def _push(self):
         self.ensure_one()
         board = self.board_id
+        if not board:
+            return
         token = board.access_token
         board._kds_push(token, "kds.card", self._kds_payload())
         board._kds_push(token, "kds.status", {"ticket_ref": self.ticket_id.ticket_ref})
@@ -123,8 +134,8 @@ class EhKdsCard(models.Model):
         return {
             "id": self.id,
             "event_id": self.last_event_id.id or 0,
-            "lane_id": self.lane_id.id,
-            "lane_index": lanes.index(self.lane_id) if self.lane_id in lanes else 0,
+            "lane_id": self.lane_id.id if self.lane_id else False,
+            "lane_index": lanes.index(self.lane_id) if self.lane_id and self.lane_id in lanes else -1,
             "status": self.status,
             "ticket_id": self.ticket_id.id,
             "ticket_ref": self.ticket_id.ticket_ref or str(self.ticket_id.id),
