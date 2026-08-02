@@ -22,5 +22,5 @@ class EhKdsRouteRule(models.Model):
         "product.template.attribute.value",
         help="Optional attribute match, for example a spicy variant.",
     )
-    target_lane_id = fields.Many2one("eh.kds.lane", help="Force placement on this lane. Empty uses the first lane.")
+    target_lane_id = fields.Many2one("eh.kds.lane", ondelete="set null", help="Force placement on this lane. Empty uses the first lane.")
     active = fields.Boolean(default=True)

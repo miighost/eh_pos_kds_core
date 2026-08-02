@@ -24,7 +24,7 @@ class EhKdsCard(models.Model):
     _order = "id"
 
     item_id = fields.Many2one("eh.kds.ticket.item", required=True, ondelete="cascade", index=True)
-    lane_id = fields.Many2one("eh.kds.lane", required=True, index=True)
+    lane_id = fields.Many2one("eh.kds.lane", required=True, ondelete="cascade", index=True)
     board_id = fields.Many2one(related="lane_id.board_id", store=True, index=True)
     ticket_id = fields.Many2one(related="item_id.ticket_id", store=True, index=True)
     bump_event_ids = fields.One2many("eh.kds.bump.event", "card_id", string="Bump Events")

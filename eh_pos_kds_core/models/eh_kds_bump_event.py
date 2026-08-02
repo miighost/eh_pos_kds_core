@@ -25,8 +25,8 @@ class EhKdsBumpEvent(models.Model):
         ],
         required=True,
     )
-    from_lane_id = fields.Many2one("eh.kds.lane")
-    to_lane_id = fields.Many2one("eh.kds.lane")
+    from_lane_id = fields.Many2one("eh.kds.lane", ondelete="set null")
+    to_lane_id = fields.Many2one("eh.kds.lane", ondelete="set null")
     actor_id = fields.Many2one("res.users", default=lambda self: self.env.user)
     reason = fields.Char(help="Free text reason, used for voids and comps.")
     note = fields.Char()
