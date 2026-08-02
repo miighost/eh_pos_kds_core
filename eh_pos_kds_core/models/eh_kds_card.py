@@ -20,7 +20,7 @@ class EhKdsCard(models.Model):
     """
 
     _name = "eh.kds.card"
-    _description = "ERP Heritage KDS Card"
+    _description = "MiiG KDS Card"
     _order = "id"
 
     item_id = fields.Many2one("eh.kds.ticket.item", required=True, ondelete="cascade", index=True)

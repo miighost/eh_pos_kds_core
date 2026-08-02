@@ -10,7 +10,7 @@ class EhKdsLane(models.Model):
     """
 
     _name = "eh.kds.lane"
-    _description = "ERP Heritage KDS Lane"
+    _description = "MiiG KDS Lane"
     _order = "sequence, id"
 
     name = fields.Char(required=True)

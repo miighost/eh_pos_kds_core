@@ -9,7 +9,7 @@ class EhKdsTicketItem(models.Model):
     """
 
     _name = "eh.kds.ticket.item"
-    _description = "ERP Heritage KDS Ticket Item"
+    _description = "MiiG KDS Ticket Item"
     _order = "id"
 
     ticket_id = fields.Many2one("eh.kds.ticket", required=True, ondelete="cascade", index=True)

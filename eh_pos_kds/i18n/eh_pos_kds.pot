@@ -103,7 +103,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/eh_pos_kds/static/src/app/kds_board.xml:0
 msgid ""
-"The ERP Heritage brand element carries this board's configuration. Restore "
+"The MiiG brand element carries this board's configuration. Restore "
 "it to load the board."
 msgstr ""
 

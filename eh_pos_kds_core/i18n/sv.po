@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: Swedish\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -228,43 +228,43 @@ msgstr "Visningsnamn"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_board
-msgid "ERP Heritage KDS Board"
-msgstr "ERP Heritage KDS-tavla"
+msgid "MiiG KDS Board"
+msgstr "MiiG KDS-tavla"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bump_event
-msgid "ERP Heritage KDS Bump Event"
-msgstr "ERP Heritage KDS bump-händelse"
+msgid "MiiG KDS Bump Event"
+msgstr "MiiG KDS bump-händelse"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bus_mixin
-msgid "ERP Heritage KDS Bus Mixin"
+msgid "MiiG KDS Bus Mixin"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
-msgstr "ERP Heritage KDS-kort"
+msgid "MiiG KDS Card"
+msgstr "MiiG KDS-kort"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_lane
-msgid "ERP Heritage KDS Lane"
-msgstr "ERP Heritage KDS-fält"
+msgid "MiiG KDS Lane"
+msgstr "MiiG KDS-fält"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_route_rule
-msgid "ERP Heritage KDS Routing Rule"
-msgstr "ERP Heritage KDS-dirigeringsregel"
+msgid "MiiG KDS Routing Rule"
+msgstr "MiiG KDS-dirigeringsregel"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
-msgstr "ERP Heritage KDS-biljett"
+msgid "MiiG KDS Ticket"
+msgstr "MiiG KDS-biljett"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
-msgstr "ERP Heritage KDS-biljettpost"
+msgid "MiiG KDS Ticket Item"
+msgstr "MiiG KDS-biljettpost"
 
 #. module: eh_pos_kds_core
 #: model:ir.model.fields,field_description:eh_pos_kds_core.field_eh_kds_board__notify_on_ready

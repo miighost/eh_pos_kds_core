@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: Hindi\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
@@ -104,10 +104,10 @@ msgstr "कागज़ खत्म:"
 #. odoo-javascript
 #: code:addons/eh_pos_kds/static/src/app/kds_board.xml:0
 msgid ""
-"The ERP Heritage brand element carries this board's configuration. Restore "
+"The MiiG brand element carries this board's configuration. Restore "
 "it to load the board."
 msgstr ""
-"ERP Heritage ब्रांड तत्व इस बोर्ड का कॉन्फ़िगरेशन रखता है। बोर्ड लोड करने के"
+"MiiG ब्रांड तत्व इस बोर्ड का कॉन्फ़िगरेशन रखता है। बोर्ड लोड करने के"
 " लिए इसे पुनर्स्थापित करें।"
 
 #. module: eh_pos_kds

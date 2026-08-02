@@ -14,7 +14,7 @@ class EhKdsBusMixin(models.AbstractModel):
     """
 
     _name = "eh.kds.bus.mixin"
-    _description = "ERP Heritage KDS Bus Mixin"
+    _description = "MiiG KDS Bus Mixin"
 
     def _kds_push(self, token, topic, payload=None):
         """Send one delta message of type ``topic`` on the board's private

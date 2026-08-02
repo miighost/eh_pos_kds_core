@@ -10,7 +10,7 @@ class EhKdsTicket(models.Model):
     """
 
     _name = "eh.kds.ticket"
-    _description = "ERP Heritage KDS Ticket"
+    _description = "MiiG KDS Ticket"
     _inherit = ["eh.kds.bus.mixin"]
     _order = "id desc"
 

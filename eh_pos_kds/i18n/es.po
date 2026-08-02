@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -104,10 +104,10 @@ msgstr "Sin papel:"
 #. odoo-javascript
 #: code:addons/eh_pos_kds/static/src/app/kds_board.xml:0
 msgid ""
-"The ERP Heritage brand element carries this board's configuration. Restore "
+"The MiiG brand element carries this board's configuration. Restore "
 "it to load the board."
 msgstr ""
-"El elemento de marca ERP Heritage contiene la configuración de este tablero."
+"El elemento de marca MiiG contiene la configuración de este tablero."
 " Restáurelo para cargar el tablero."
 
 #. module: eh_pos_kds

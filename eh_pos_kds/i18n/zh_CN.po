@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: Chinese (Simplified)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -104,9 +104,9 @@ msgstr "缺纸："
 #. odoo-javascript
 #: code:addons/eh_pos_kds/static/src/app/kds_board.xml:0
 msgid ""
-"The ERP Heritage brand element carries this board's configuration. Restore "
+"The MiiG brand element carries this board's configuration. Restore "
 "it to load the board."
-msgstr "ERP Heritage 品牌元素承载此看板的配置。请还原它以加载看板。"
+msgstr "MiiG 品牌元素承载此看板的配置。请还原它以加载看板。"
 
 #. module: eh_pos_kds
 #. odoo-javascript

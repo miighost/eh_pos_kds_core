@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: Chinese (Simplified)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -224,43 +224,43 @@ msgstr "显示名称"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_board
-msgid "ERP Heritage KDS Board"
-msgstr "ERP Heritage KDS 看板"
+msgid "MiiG KDS Board"
+msgstr "MiiG KDS 看板"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bump_event
-msgid "ERP Heritage KDS Bump Event"
-msgstr "ERP Heritage KDS 推进事件"
+msgid "MiiG KDS Bump Event"
+msgstr "MiiG KDS 推进事件"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bus_mixin
-msgid "ERP Heritage KDS Bus Mixin"
+msgid "MiiG KDS Bus Mixin"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
-msgstr "ERP Heritage KDS 卡片"
+msgid "MiiG KDS Card"
+msgstr "MiiG KDS 卡片"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_lane
-msgid "ERP Heritage KDS Lane"
-msgstr "ERP Heritage KDS 通道"
+msgid "MiiG KDS Lane"
+msgstr "MiiG KDS 通道"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_route_rule
-msgid "ERP Heritage KDS Routing Rule"
-msgstr "ERP Heritage KDS 路由规则"
+msgid "MiiG KDS Routing Rule"
+msgstr "MiiG KDS 路由规则"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
-msgstr "ERP Heritage KDS 工单"
+msgid "MiiG KDS Ticket"
+msgstr "MiiG KDS 工单"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
-msgstr "ERP Heritage KDS 工单项目"
+msgid "MiiG KDS Ticket Item"
+msgstr "MiiG KDS 工单项目"
 
 #. module: eh_pos_kds_core
 #: model:ir.model.fields,field_description:eh_pos_kds_core.field_eh_kds_board__notify_on_ready

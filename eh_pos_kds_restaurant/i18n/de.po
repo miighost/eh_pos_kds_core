@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: German\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -36,18 +36,18 @@ msgstr "Anzeigename"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
-msgstr "ERP Heritage KDS-Karte"
+msgid "MiiG KDS Card"
+msgstr "MiiG KDS-Karte"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
-msgstr "ERP Heritage KDS-Ticket"
+msgid "MiiG KDS Ticket"
+msgstr "MiiG KDS-Ticket"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
-msgstr "ERP Heritage KDS-Ticketposition"
+msgid "MiiG KDS Ticket Item"
+msgstr "MiiG KDS-Ticketposition"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model.fields,field_description:eh_pos_kds_restaurant.field_eh_kds_card__id

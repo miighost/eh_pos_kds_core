@@ -1,4 +1,4 @@
-"""Single source of truth for the ERP Heritage attribution mark.
+"""Single source of truth for the MiiG attribution mark.
 
 The brand anchor is rendered server side into both display pages and is also
 attached to every realtime payload. It is intentionally small and dependency

@@ -1,6 +1,6 @@
 # Brand protection: design and honest threat model
 
-This suite is free. The return is attribution: the ERP Heritage mark shows on
+This suite is free. The return is attribution: the MiiG mark shows on
 the kitchen board and the public order status screen. This file documents how
 the attribution is protected, and states plainly what is and is not enforceable,
 so the intent is unambiguous and the trade off (free in exchange for
@@ -41,7 +41,7 @@ attribution) is on the record.
   report, and a product good enough that forking is not worth it.
 
 The only way to make the mark truly un removable would be a hosted component (the
-display fetches a required, signed config from an ERP Heritage server, so removing
+display fetches a required, signed config from an MiiG server, so removing
 it breaks the app and you cannot self host the brand) or a compiled and obfuscated
 bundle. Both trade away "runs offline on plain Community" and are deliberately not
 used here unless the product owner chooses that path.

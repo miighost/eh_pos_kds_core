@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -230,43 +230,43 @@ msgstr "Nombre para mostrar"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_board
-msgid "ERP Heritage KDS Board"
-msgstr "Tablero KDS ERP Heritage"
+msgid "MiiG KDS Board"
+msgstr "Tablero KDS MiiG"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bump_event
-msgid "ERP Heritage KDS Bump Event"
-msgstr "Evento de avance KDS ERP Heritage"
+msgid "MiiG KDS Bump Event"
+msgstr "Evento de avance KDS MiiG"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bus_mixin
-msgid "ERP Heritage KDS Bus Mixin"
+msgid "MiiG KDS Bus Mixin"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
-msgstr "Tarjeta KDS ERP Heritage"
+msgid "MiiG KDS Card"
+msgstr "Tarjeta KDS MiiG"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_lane
-msgid "ERP Heritage KDS Lane"
-msgstr "Carril KDS ERP Heritage"
+msgid "MiiG KDS Lane"
+msgstr "Carril KDS MiiG"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_route_rule
-msgid "ERP Heritage KDS Routing Rule"
-msgstr "Regla de enrutamiento KDS ERP Heritage"
+msgid "MiiG KDS Routing Rule"
+msgstr "Regla de enrutamiento KDS MiiG"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
-msgstr "Ticket KDS ERP Heritage"
+msgid "MiiG KDS Ticket"
+msgstr "Ticket KDS MiiG"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
-msgstr "Elemento de ticket KDS ERP Heritage"
+msgid "MiiG KDS Ticket Item"
+msgstr "Elemento de ticket KDS MiiG"
 
 #. module: eh_pos_kds_core
 #: model:ir.model.fields,field_description:eh_pos_kds_core.field_eh_kds_board__notify_on_ready

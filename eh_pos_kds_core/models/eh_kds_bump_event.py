@@ -10,7 +10,7 @@ class EhKdsBumpEvent(models.Model):
     """
 
     _name = "eh.kds.bump.event"
-    _description = "ERP Heritage KDS Bump Event"
+    _description = "MiiG KDS Bump Event"
     _order = "id"
 
     card_id = fields.Many2one("eh.kds.card", required=True, ondelete="cascade", index=True)

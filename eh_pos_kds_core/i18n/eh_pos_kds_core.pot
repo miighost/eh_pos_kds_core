@@ -223,42 +223,42 @@ msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_board
-msgid "ERP Heritage KDS Board"
+msgid "MiiG KDS Board"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bump_event
-msgid "ERP Heritage KDS Bump Event"
+msgid "MiiG KDS Bump Event"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bus_mixin
-msgid "ERP Heritage KDS Bus Mixin"
+msgid "MiiG KDS Bus Mixin"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
+msgid "MiiG KDS Card"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_lane
-msgid "ERP Heritage KDS Lane"
+msgid "MiiG KDS Lane"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_route_rule
-msgid "ERP Heritage KDS Routing Rule"
+msgid "MiiG KDS Routing Rule"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
+msgid "MiiG KDS Ticket"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
+msgid "MiiG KDS Ticket Item"
 msgstr ""
 
 #. module: eh_pos_kds_core

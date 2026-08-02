@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -36,18 +36,18 @@ msgstr "표시명"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
-msgstr "ERP Heritage KDS 카드"
+msgid "MiiG KDS Card"
+msgstr "MiiG KDS 카드"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
-msgstr "ERP Heritage KDS 티켓"
+msgid "MiiG KDS Ticket"
+msgstr "MiiG KDS 티켓"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
-msgstr "ERP Heritage KDS 티켓 항목"
+msgid "MiiG KDS Ticket Item"
+msgstr "MiiG KDS 티켓 항목"
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model.fields,field_description:eh_pos_kds_restaurant.field_eh_kds_card__id

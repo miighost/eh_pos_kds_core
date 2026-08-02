@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="board_index" name="ERP Heritage Kitchen Board">
+    <template id="board_index" name="MiiG Kitchen Board">
         &lt;!DOCTYPE html&gt;
         <html>
             <head>

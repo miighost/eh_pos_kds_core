@@ -22,7 +22,7 @@ class EhKdsBoard(models.Model):
     """
 
     _name = "eh.kds.board"
-    _description = "ERP Heritage KDS Board"
+    _description = "MiiG KDS Board"
     _inherit = ["eh.kds.bus.mixin"]
     _order = "sequence, id"
 

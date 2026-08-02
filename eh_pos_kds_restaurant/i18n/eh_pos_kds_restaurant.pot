@@ -35,17 +35,17 @@ msgstr ""
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
+msgid "MiiG KDS Card"
 msgstr ""
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
+msgid "MiiG KDS Ticket"
 msgstr ""
 
 #. module: eh_pos_kds_restaurant
 #: model:ir.model,name:eh_pos_kds_restaurant.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
+msgid "MiiG KDS Ticket Item"
 msgstr ""
 
 #. module: eh_pos_kds_restaurant

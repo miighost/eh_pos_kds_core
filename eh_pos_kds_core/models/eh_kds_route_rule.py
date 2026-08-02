@@ -11,7 +11,7 @@ class EhKdsRouteRule(models.Model):
     """
 
     _name = "eh.kds.route.rule"
-    _description = "ERP Heritage KDS Routing Rule"
+    _description = "MiiG KDS Routing Rule"
     _order = "sequence, id"
 
     board_id = fields.Many2one("eh.kds.board", required=True, ondelete="cascade", index=True)

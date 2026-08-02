@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-01 04:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:34+0000\n"
-"Last-Translator: ERP Heritage <info@erpheritage.com.au>\n"
+"Last-Translator: MiiG <info@erpheritage.com.au>\n"
 "Language-Team: German\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -231,43 +231,43 @@ msgstr "Anzeigename"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_board
-msgid "ERP Heritage KDS Board"
-msgstr "ERP Heritage KDS-Board"
+msgid "MiiG KDS Board"
+msgstr "MiiG KDS-Board"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bump_event
-msgid "ERP Heritage KDS Bump Event"
-msgstr "ERP Heritage KDS Bump-Ereignis"
+msgid "MiiG KDS Bump Event"
+msgstr "MiiG KDS Bump-Ereignis"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_bus_mixin
-msgid "ERP Heritage KDS Bus Mixin"
+msgid "MiiG KDS Bus Mixin"
 msgstr ""
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_card
-msgid "ERP Heritage KDS Card"
-msgstr "ERP Heritage KDS-Karte"
+msgid "MiiG KDS Card"
+msgstr "MiiG KDS-Karte"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_lane
-msgid "ERP Heritage KDS Lane"
-msgstr "ERP Heritage KDS-Spur"
+msgid "MiiG KDS Lane"
+msgstr "MiiG KDS-Spur"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_route_rule
-msgid "ERP Heritage KDS Routing Rule"
-msgstr "ERP Heritage KDS-Routing-Regel"
+msgid "MiiG KDS Routing Rule"
+msgstr "MiiG KDS-Routing-Regel"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket
-msgid "ERP Heritage KDS Ticket"
-msgstr "ERP Heritage KDS-Ticket"
+msgid "MiiG KDS Ticket"
+msgstr "MiiG KDS-Ticket"
 
 #. module: eh_pos_kds_core
 #: model:ir.model,name:eh_pos_kds_core.model_eh_kds_ticket_item
-msgid "ERP Heritage KDS Ticket Item"
-msgstr "ERP Heritage KDS-Ticketposition"
+msgid "MiiG KDS Ticket Item"
+msgstr "MiiG KDS-Ticketposition"
 
 #. module: eh_pos_kds_core
 #: model:ir.model.fields,field_description:eh_pos_kds_core.field_eh_kds_board__notify_on_ready

@@ -1,10 +1,10 @@
 END USER LICENCE AGREEMENT
-ERP Heritage Kitchen Display suite (eh_pos_kds_core, eh_pos_kds, eh_pos_order_status)
+MiiG Kitchen Display suite (eh_pos_kds_core, eh_pos_kds, eh_pos_order_status)
 
-1. Grant. ERP Heritage grants you a free, non exclusive, non transferable right
+1. Grant. MiiG grants you a free, non exclusive, non transferable right
    to install and use this software on any number of Odoo databases you operate.
 
-2. Attribution. The software displays the ERP Heritage brand mark (logo and
+2. Attribution. The software displays the MiiG brand mark (logo and
    company name) on the kitchen board and on the public order status screen. You
    may not remove, hide, obscure, replace or alter that attribution, in source,
    in configuration, or by overlay, in any deployment of the software. The
