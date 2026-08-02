@@ -173,7 +173,7 @@ class EhKdsBoard(models.Model):
             domain.append(("ticket_id.pos_order_id.session_id", "in", open_sessions.ids))
         elif self.data_scope == "today":
             today_start = fields.Datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-            domain.append(("placed_at", ">=", today_start))
+            domain.append(("create_date", ">=", today_start))
         return domain
 
     def _kds_board_data(self):
