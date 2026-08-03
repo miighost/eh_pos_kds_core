@@ -1,11 +1,98 @@
 /** @odoo-module */
 
-export function exportForKitchenPrinting(pos, order) {
+export function getRootCategoryGroup(pos, product) {
+    if (!product) {
+        return "Food";
+    }
+    let categId = false;
+    if (Array.isArray(product.pos_categ_id) && product.pos_categ_id.length > 0) {
+        categId = product.pos_categ_id[0];
+    } else if (typeof product.pos_categ_id === "number") {
+        categId = product.pos_categ_id;
+    } else if (product.pos_categ_id?.id) {
+        categId = product.pos_categ_id.id;
+    } else if (product.categ_id) {
+        categId = Array.isArray(product.categ_id) ? product.categ_id[0] : (product.categ_id.id || product.categ_id);
+    }
+
+    if (!categId || !pos) {
+        const pName = (product.name || product.display_name || "").toLowerCase();
+        if (
+            pName.includes("drink") ||
+            pName.includes("beer") ||
+            pName.includes("wine") ||
+            pName.includes("cocktail") ||
+            pName.includes("juice") ||
+            pName.includes("coffee") ||
+            pName.includes("tea") ||
+            pName.includes("water") ||
+            pName.includes("soda")
+        ) {
+            return "Drinks";
+        }
+        return "Food";
+    }
+
+    let cat = false;
+    if (pos.db && typeof pos.db.get_category_by_id === "function") {
+        cat = pos.db.get_category_by_id(categId);
+    } else if (pos.models && pos.models["pos.category"]) {
+        cat = pos.models["pos.category"].get(categId);
+    }
+
+    let curr = cat;
+    let guard = 0;
+    while (curr && curr.parent_id && guard < 10) {
+        guard++;
+        const parentId = Array.isArray(curr.parent_id) ? curr.parent_id[0] : (curr.parent_id.id || curr.parent_id);
+        if (!parentId) break;
+        let parentCat = false;
+        if (pos.db && typeof pos.db.get_category_by_id === "function") {
+            parentCat = pos.db.get_category_by_id(parentId);
+        } else if (pos.models && pos.models["pos.category"]) {
+            parentCat = pos.models["pos.category"].get(parentId);
+        }
+        if (parentCat) {
+            curr = parentCat;
+        } else {
+            break;
+        }
+    }
+
+    const catName = curr ? (curr.name || "") : (cat ? (cat.name || "") : "");
+    const lower = catName.toLowerCase();
+    if (
+        lower.includes("drink") ||
+        lower.includes("bar") ||
+        lower.includes("beverage") ||
+        lower.includes("wine") ||
+        lower.includes("cocktail") ||
+        lower.includes("beer") ||
+        lower.includes("juice") ||
+        lower.includes("coffee") ||
+        lower.includes("tea") ||
+        lower.includes("beverages")
+    ) {
+        return "Drinks";
+    }
+    return "Food";
+}
+
+export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null) {
     if (!order) {
         return null;
     }
 
-    const lines = order.getOrderlines ? order.getOrderlines() : (order.orderlines || order.lines || []);
+    let lines = order.getOrderlines ? order.getOrderlines() : (order.orderlines || order.lines || []);
+
+    if (targetCategoryGroup) {
+        lines = lines.filter((line) => {
+            const product = line.getProduct ? line.getProduct() : (line.product || {});
+            const group = getRootCategoryGroup(pos, product);
+            return group === targetCategoryGroup;
+        });
+    }
+
     let hasNewItems = false;
     const newLines = [];
     const sentLines = [];

@@ -5,8 +5,8 @@
         <div class="pos-receipt p-1" style="font-family: monospace; max-width: 300px; margin: 0 auto; color: #000;">
             <!-- Header -->
             <div class="pos-receipt-header text-center">
-                <div style="font-size: 240%; font-weight: 900; letter-spacing: 2px; margin-bottom: 2px;">
-                    KOT
+                <div style="font-size: 200%; font-weight: 900; letter-spacing: 1px; margin-bottom: 2px;">
+                    KOT <t t-if="props.data.category_title"> - <t t-esc="props.data.category_title"/></t>
                 </div>
                 <div t-if="props.data.is_addition" style="font-size: 110%; font-weight: bold; background-color: #000; color: #fff; padding: 2px 5px; margin-bottom: 4px; display: inline-block;">
                     *** NEW ADDITION ***

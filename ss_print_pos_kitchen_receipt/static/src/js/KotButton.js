@@ -39,24 +39,40 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
         return;
     }
 
-    const kitchenData = exportForKitchenPrinting(pos, order);
+    const categoriesToPrint = [];
+    const foodData = exportForKitchenPrinting(pos, order, "Food");
+    if (foodData && (foodData.has_new_items || !order.was_kot_printed) && foodData.orderlines.length > 0) {
+        categoriesToPrint.push({ title: "KITCHEN (FOOD)", data: foodData });
+    }
 
-    // Auto-print ONLY when there are new unprinted items or if it's the first print.
-    // Prevents printing duplicate KOT receipts if no new items were added.
-    if (kitchenData && (kitchenData.has_new_items || !order.was_kot_printed)) {
+    const drinksData = exportForKitchenPrinting(pos, order, "Drinks");
+    if (drinksData && (drinksData.has_new_items || !order.was_kot_printed) && drinksData.orderlines.length > 0) {
+        categoriesToPrint.push({ title: "BAR (DRINKS)", data: drinksData });
+    }
+
+    if (categoriesToPrint.length === 0) {
+        const fullData = exportForKitchenPrinting(pos, order);
+        if (fullData && (fullData.has_new_items || !order.was_kot_printed) && fullData.orderlines.length > 0) {
+            categoriesToPrint.push({ title: "KITCHEN", data: fullData });
+        }
+    }
+
+    for (const item of categoriesToPrint) {
+        item.data.category_title = item.title;
         if (pos.printer && typeof pos.printer.print === "function") {
             try {
                 await pos.printer.print(
                     KitchenReceiptComponent,
-                    { data: kitchenData },
+                    { data: item.data },
                     { webPrintFallback: true }
                 );
             } catch (_e) {
                 // ignore printer errors
             }
         }
+    }
 
-        // Update line.printed_qty on each orderline so future additions are tracked precisely
+    if (categoriesToPrint.length > 0) {
         for (const line of lines) {
             const qtyNum = line.get_quantity ? line.get_quantity() : (line.quantity || line.qty || 1);
             line.printed_qty = qtyNum;
@@ -87,7 +103,7 @@ async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
         return;
     }
 
-    // 1. Auto print KOT for NEW unprinted items only (no duplicate prints)
+    // 1. Auto print separate KOT tickets for Food vs Drinks (no duplicates)
     try {
         await doPrintKitchenReceipt(pos, order);
     } catch (_e) {
