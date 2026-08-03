@@ -1,20 +1,18 @@
 /** @odoo-module */
 
-import { formatDateTime } from "@web/core/l10n/dates";
-
 export function exportForKitchenPrinting(pos, order) {
     if (!order) {
         return null;
     }
 
-    const lines = order.getOrderlines ? order.getOrderlines() : (order.orderlines || []);
+    const lines = order.getOrderlines ? order.getOrderlines() : (order.orderlines || order.lines || []);
     let hasNewItems = false;
     const newLines = [];
     const sentLines = [];
 
     const orderlines = lines.map((line) => {
-        const product = line.getProduct ? line.getProduct() : line.product;
-        const productName = product ? product.name : "";
+        const product = line.getProduct ? line.getProduct() : (line.product || {});
+        const productName = product ? (product.name || product.display_name || "") : "";
         const attributeValues =
             line.orderDisplayProductName?.attributeString ||
             (line.getFullProductName ? line.getFullProductName().replace(productName, "").trim() : "");
@@ -25,7 +23,8 @@ export function exportForKitchenPrinting(pos, order) {
             qtyNum = line.get_quantity();
             qtyStr = String(qtyNum);
         } else if (line.getQuantityStr) {
-            qtyStr = line.getQuantityStr().qtyStr;
+            const qObj = line.getQuantityStr();
+            qtyStr = qObj ? (qObj.qtyStr || String(qObj)) : "1";
             qtyNum = parseFloat(qtyStr) || 1;
         } else {
             qtyNum = line.quantity || line.qty || 1;
@@ -66,7 +65,16 @@ export function exportForKitchenPrinting(pos, order) {
         return lineData;
     });
 
-    const dateStr = order.date_order ? formatDateTime(order.date_order) : formatDateTime(new Date());
+    let dateStr = "";
+    try {
+        if (order.date_order) {
+            dateStr = typeof order.date_order === "string" ? order.date_order : order.date_order.toLocaleString();
+        } else {
+            dateStr = new Date().toLocaleString();
+        }
+    } catch (_e) {
+        dateStr = new Date().toLocaleString();
+    }
 
     const tableName =
         order.table_id && order.table_id.table_number

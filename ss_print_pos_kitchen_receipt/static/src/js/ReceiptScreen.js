@@ -14,44 +14,69 @@ patch(ReceiptScreen.prototype, {
         });
 
         onMounted(() => {
-            if (this.pos.config.kitchen_print_auto) {
+            if (this.pos?.config?.kitchen_print_auto) {
                 this.printKitchenChanges();
             }
         });
     },
 
     async printReceiptAndKitchen() {
-        await this.doFullPrint.call();
+        if (typeof this.doFullPrint === "function") {
+            try {
+                await this.doFullPrint();
+            } catch (_e) {}
+        }
         await this.printKitchenChanges();
     },
 
     async printKitchenChanges() {
-        if (!this.kitchenPrintState.printedChanges) {
-            await this.pos.sendOrderInPreparation(this.currentOrder);
+        if (!this.kitchenPrintState.printedChanges && this.currentOrder) {
+            if (typeof this.pos?.sendOrderInPreparation === "function") {
+                try {
+                    await this.pos.sendOrderInPreparation(this.currentOrder);
+                } catch (_e) {}
+            }
             this.kitchenPrintState.printedChanges = true;
         }
     },
 
     async printKitchenReceipt() {
+        if (!this.currentOrder) {
+            return;
+        }
         const kitchenData = exportForKitchenPrinting(this.pos, this.currentOrder);
-        await this.pos.printer.print(
-            KitchenReceiptComponent,
-            { data: kitchenData },
-            { webPrintFallback: true }
-        );
+        if (this.pos?.printer && typeof this.pos.printer.print === "function") {
+            try {
+                await this.pos.printer.print(
+                    KitchenReceiptComponent,
+                    { data: kitchenData },
+                    { webPrintFallback: true }
+                );
+            } catch (_e) {}
+        }
     },
 
     _exportForKitchenPrinting(order) {
-        return exportForKitchenPrinting(this.pos, order);
+        return exportForKitchenPrinting(this.pos, order || this.currentOrder);
     },
 
     hasKitchenChanges() {
-        const changes = this.pos.getOrderChanges(this.currentOrder);
-        return Boolean(
-            changes.nbrOfChanges ||
-                Object.keys(changes.noteUpdate).length ||
-                changes.general_customer_note ||
-                changes.internal_note
-        );
+        if (!this.currentOrder || !this.pos) {
+            return false;
+        }
+        if (typeof this.pos.getOrderChanges === "function") {
+            try {
+                const changes = this.pos.getOrderChanges(this.currentOrder);
+                return Boolean(
+                    changes?.nbrOfChanges ||
+                        (changes?.noteUpdate && Object.keys(changes.noteUpdate).length) ||
+                        changes?.general_customer_note ||
+                        changes?.internal_note
+                );
+            } catch (_e) {
+                return false;
+            }
+        }
+        return false;
     },
 });
