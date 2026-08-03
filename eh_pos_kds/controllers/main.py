@@ -41,8 +41,6 @@ class EhKdsBoardPage(http.Controller):
         )
         if not board or not consteq(board.access_token, token):
             raise request.not_found()
-        # The token lives only in the brand element boot blob, not in session,
-        # so the brand mark is load bearing for the app.
         session_info = _session_info()
         odoo_json = Markup(
             json.dumps(
@@ -69,6 +67,16 @@ class EhKdsBoardPage(http.Controller):
         )
         if not board or not consteq(board.access_token, token):
             raise request.not_found()
+        return board
+
+    def _json_board(self, token):
+        if not token:
+            return False
+        board = request.env["eh.kds.board"].sudo().search(
+            [("access_token", "=", token)], limit=1
+        )
+        if not board or not consteq(board.access_token, token):
+            return False
         return board
 
     @http.route("/eh_kds/status/<token>", auth="public", type="http", website=False)
@@ -98,22 +106,24 @@ class EhKdsBoardPage(http.Controller):
     @http.route("/eh_kds/board/data", auth="public", type="jsonrpc")
     def board_data(self, token, **kw):
         """Full board snapshot for first paint and for reconnect."""
-        return self._board(token)._kds_board_data()
+        board = self._json_board(token)
+        if not board:
+            return {"error": "not_found", "ok": False}
+        return board._kds_board_data()
 
     @http.route("/eh_kds/status/data", auth="public", type="jsonrpc")
     def status_data(self, token, **kw):
         """Status screen JSON snapshot for now serving / preparing."""
-        return self._board(token)._kds_status_data()
+        board = self._json_board(token)
+        if not board:
+            return {"error": "not_found", "ok": False}
+        return board._kds_status_data()
 
     @http.route("/eh_kds/board/op", auth="public", type="jsonrpc")
     def board_op(self, token, action, card_ids, reason=None, to_index=None, **kw):
-        """Token guarded write surface. The board page is public, so bumps come
-        through here, not generic call_kw.
-
-        The ``move`` action takes an absolute lane index so an offline replay is
-        idempotent (re applying the same target is a no op).
-        """
-        board = self._board(token)
+        board = self._json_board(token)
+        if not board:
+            return {"ok": False, "reason": "not_found"}
         cards = (
             request.env["eh.kds.card"].sudo().browse(card_ids).exists().filtered(
                 lambda c: c.board_id == board
@@ -136,7 +146,10 @@ class EhKdsBoardPage(http.Controller):
     @http.route("/eh_kds/board/stats", auth="public", type="jsonrpc")
     def board_stats(self, token, **kw):
         """Live analytics KPIs for the board metrics panel."""
-        return self._board(token)._kds_stats()
+        board = self._json_board(token)
+        if not board:
+            return {"error": "not_found", "ok": False}
+        return board._kds_stats()
 
     @http.route("/eh_kds/sw.js", auth="public", type="http")
     def service_worker(self, **kw):
