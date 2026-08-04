@@ -92,7 +92,7 @@ export class KdsBoard extends Component {
                 this.serverOffset = this._parse(data.server_time) - this._clientNow();
                 this.state.offline = false;
                 this.state.lastSync = new Date();
-            } catch {
+            } catch (_e) {
                 this.state.offline = true;
             }
             return;
@@ -107,7 +107,7 @@ export class KdsBoard extends Component {
             this.state.offline = false;
             this.state.lastSync = new Date();
             this.offline.saveSnapshot(data);
-        } catch {
+        } catch (_e) {
             // server unreachable: fall back to the cached snapshot, read mostly
             const row = await this.offline.loadSnapshot();
             if (row && row.data) {
@@ -177,7 +177,7 @@ export class KdsBoard extends Component {
                 res.cards.forEach((c) => this.onCardEvent(c));
             }
             this.state.offline = false;
-        } catch {
+        } catch (_e) {
             await this.offline.enqueue({ action, card_ids: cardIds, ...extra });
             this.state.offline = true;
             await this._refreshQueueCount();
@@ -214,7 +214,7 @@ export class KdsBoard extends Component {
             try {
                 await rpc("/eh_kds/board/op", { token: this.token, ...row.op });
                 await this.offline.drop(row.key);
-            } catch {
+            } catch (_e) {
                 break; // still offline, keep the rest for the next reconnect
             }
         }
@@ -249,7 +249,7 @@ export class KdsBoard extends Component {
     async loadStats() {
         try {
             this.state.stats = await rpc("/eh_kds/board/stats", { token: this.token });
-        } catch {
+        } catch (_e) {
             // keep the last stats if the server is briefly unreachable
         }
     }
@@ -484,7 +484,7 @@ export class KdsBoard extends Component {
             osc.connect(gain).connect(ctx.destination);
             osc.start();
             osc.stop(ctx.currentTime + 0.15);
-        } catch {
+        } catch (_e) {
             // sound is a nicety, never fatal
         }
     }

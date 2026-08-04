@@ -65,7 +65,7 @@ export class OfflineStore {
         }
         try {
             await _wrap(_tx(db, SNAP, "readwrite").put({ token: this.token, data, at: Date.now() }));
-        } catch {
+        } catch (_e) {
             // cache write failures are non fatal
         }
     }
@@ -78,7 +78,7 @@ export class OfflineStore {
         try {
             const row = await _wrap(_tx(db, SNAP, "readonly").get(this.token));
             return row || null;
-        } catch {
+        } catch (_e) {
             return null;
         }
     }
@@ -90,7 +90,7 @@ export class OfflineStore {
         }
         try {
             await _wrap(_tx(db, QUEUE, "readwrite").add({ token: this.token, op, at: Date.now() }));
-        } catch {
+        } catch (_e) {
             // if we cannot queue, the op is simply lost; the board still works
         }
     }
@@ -103,7 +103,7 @@ export class OfflineStore {
         try {
             const all = await _wrap(_tx(db, QUEUE, "readonly").getAll());
             return all.filter((row) => row.token === this.token).sort((a, b) => a.key - b.key);
-        } catch {
+        } catch (_e) {
             return [];
         }
     }
@@ -115,7 +115,7 @@ export class OfflineStore {
         }
         try {
             await _wrap(_tx(db, QUEUE, "readwrite").delete(key));
-        } catch {
+        } catch (_e) {
             // ignore
         }
     }

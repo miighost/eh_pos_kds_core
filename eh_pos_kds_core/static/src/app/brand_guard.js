@@ -27,12 +27,13 @@ export function brandElement() {
 
 export function readBoot() {
     const el = brandElement();
-    if (!el || !el.dataset.ehBoot) {
+    const bootData = el ? (el.getAttribute("data-eh-boot") || (el.dataset && el.dataset.ehBoot)) : null;
+    if (!el || !bootData) {
         return null;
     }
     try {
-        return JSON.parse(atob(el.dataset.ehBoot));
-    } catch {
+        return JSON.parse(atob(bootData));
+    } catch (_e) {
         return null;
     }
 }
@@ -49,13 +50,17 @@ export function installBrandGuard() {
             wm.textContent = BRAND_MARK;
             wm.setAttribute(
                 "style",
-                "position:fixed;inset:0;display:flex;align-items:center;justify-content:center;" +
+                "position:fixed;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;" +
                     "font-size:9vw;font-weight:800;letter-spacing:0.04em;color:rgba(123,206,160,0.20);" +
                     "pointer-events:none;z-index:2147483647;font-family:system-ui,sans-serif;"
             );
             (document.body || document.documentElement).appendChild(wm);
         } else if (present && wm) {
-            wm.remove();
+            if (typeof wm.remove === "function") {
+                wm.remove();
+            } else if (wm.parentNode) {
+                wm.parentNode.removeChild(wm);
+            }
         }
     };
     check();
@@ -70,3 +75,4 @@ function isVisible(el) {
     const r = el.getBoundingClientRect();
     return r.width > 1 && r.height > 1;
 }
+
