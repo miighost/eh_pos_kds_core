@@ -200,6 +200,44 @@ async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
 }
 
 
+async function doForceBrowserPrintDialog(posStore, currentOrder) {
+    const pos = posStore;
+    if (!pos) return;
+    const order = currentOrder || (pos.get_order ? pos.get_order() : false);
+    if (!order) return;
+
+    const categoriesToPrint = [];
+    const foodData = exportForKitchenPrinting(pos, order, "Food");
+    if (foodData && foodData.orderlines && foodData.orderlines.length > 0) {
+        categoriesToPrint.push({ title: "KITCHEN", data: foodData });
+    }
+
+    const drinksData = exportForKitchenPrinting(pos, order, "Drinks");
+    if (drinksData && drinksData.orderlines && drinksData.orderlines.length > 0) {
+        categoriesToPrint.push({ title: "BAR", data: drinksData });
+    }
+
+    if (categoriesToPrint.length === 0) {
+        const fullData = exportForKitchenPrinting(pos, order);
+        if (fullData && fullData.orderlines && fullData.orderlines.length > 0) {
+            categoriesToPrint.push({ title: "KITCHEN", data: fullData });
+        }
+    }
+
+    if (categoriesToPrint.length === 0) return;
+
+    if (pos.printer && typeof pos.printer.print === "function") {
+        try {
+            await pos.printer.print(
+                KitchenReceiptComponent,
+                { tickets: categoriesToPrint, data: categoriesToPrint[0].data },
+                { webPrintFallback: true }
+            );
+        } catch (_e) {}
+    }
+}
+
+
 const commonMethods = {
     async printKitchenReceipt() {
         const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
@@ -215,6 +253,11 @@ const commonMethods = {
         const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
         await doSendOrderToKitchenAndReturnToTables(this.pos, order);
     },
+
+    async onClickManualKotButton() {
+        const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
+        await doForceBrowserPrintDialog(this.pos, order);
+    },
 };
 
 patch(ProductScreen.prototype, {
@@ -225,10 +268,13 @@ patch(ProductScreen.prototype, {
                 doPrintKitchenReceipt(this.pos, order || this.currentOrder || (this.pos.get_order && this.pos.get_order()));
             this.pos.sendOrderAndReturnToTables = (order) =>
                 doSendOrderToKitchenAndReturnToTables(this.pos, order || this.currentOrder || (this.pos.get_order && this.pos.get_order()));
+            this.pos.forceBrowserPrintDialog = (order) =>
+                doForceBrowserPrintDialog(this.pos, order || this.currentOrder || (this.pos.get_order && this.pos.get_order()));
         }
     },
     ...commonMethods,
 });
+
 
 if (ActionpadWidget && ActionpadWidget.prototype) {
     patch(ActionpadWidget.prototype, {
