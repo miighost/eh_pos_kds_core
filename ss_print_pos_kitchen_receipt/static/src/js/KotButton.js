@@ -86,11 +86,16 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
         }
         if (pos.sendOrderInPreparation) {
             try {
-                await pos.sendOrderInPreparation(order);
-                directSuccess = true;
-            } catch (_e) {}
+                const res = await pos.sendOrderInPreparation(order);
+                if (res !== false && (!res || res.successful !== false)) {
+                    directSuccess = true;
+                }
+            } catch (_e) {
+                directSuccess = false;
+            }
         }
     }
+
 
     // 2. Automatic Manual Fallback: If LAN printers fail or are offline, open browser print dialog
     if (!directSuccess && pos.printer && typeof pos.printer.print === "function") {
@@ -227,6 +232,21 @@ patch(ProductScreen.prototype, {
 
 if (ActionpadWidget && ActionpadWidget.prototype) {
     patch(ActionpadWidget.prototype, {
+        get hasChangesToOrder() {
+            const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
+            if (!order) return false;
+            const food = exportForKitchenPrinting(this.pos, order, "Food");
+            const drinks = exportForKitchenPrinting(this.pos, order, "Drinks");
+
+            const newFood = (food && food.new_lines) ? food.new_lines.length : 0;
+            const cancFood = (food && food.cancelled_lines) ? food.cancelled_lines.length : 0;
+            const newDrinks = (drinks && drinks.new_lines) ? drinks.new_lines.length : 0;
+            const cancDrinks = (drinks && drinks.cancelled_lines) ? drinks.cancelled_lines.length : 0;
+
+            const nativeHasChanges = typeof order.hasChangesToPrint === "function" ? order.hasChangesToPrint() : false;
+            return (newFood > 0 || cancFood > 0 || newDrinks > 0 || cancDrinks > 0 || nativeHasChanges);
+        },
+
         get changeSummary() {
             const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
             if (!order) return null;
@@ -250,6 +270,7 @@ if (ActionpadWidget && ActionpadWidget.prototype) {
         ...commonMethods,
     });
 }
+
 
 
 
