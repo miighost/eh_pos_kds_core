@@ -60,7 +60,23 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
 
     for (const item of categoriesToPrint) {
         item.data.category_title = item.title;
-        if (pos.printer && typeof pos.printer.print === "function") {
+        let printedDirect = false;
+
+        if (pos.hardware_proxy && pos.hardware_proxy.printer) {
+            try {
+                const res = await pos.hardware_proxy.printer.print_receipt(
+                    KitchenReceiptComponent,
+                    { data: item.data }
+                );
+                if (res && res.result) {
+                    printedDirect = true;
+                }
+            } catch (_e) {
+                // proxy error
+            }
+        }
+
+        if (!printedDirect && pos.printer && typeof pos.printer.print === "function") {
             try {
                 await pos.printer.print(
                     KitchenReceiptComponent,
@@ -68,7 +84,7 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
                     { webPrintFallback: true }
                 );
             } catch (_e) {
-                // ignore printer errors
+                // ignore
             }
         }
     }
@@ -85,10 +101,11 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
         try {
             await pos.sendOrderInPreparation(order);
         } catch (_e) {
-            // ignore if not configured
+            // ignore network printer errors during testing
         }
     }
 }
+
 
 async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
     const pos = posStore;
