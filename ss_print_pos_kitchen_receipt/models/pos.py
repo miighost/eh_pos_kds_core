@@ -21,14 +21,27 @@ class PosConfig(models.Model):
             self.kitchen_print = False
 
     def _loader_params_pos_config(self):
-        result = super()._loader_params_pos_config()
-        if isinstance(result, dict) and 'search_params' in result:
-            fields_list = result['search_params'].setdefault('fields', [])
-            if 'kitchen_print' not in fields_list:
-                fields_list.append('kitchen_print')
-            if 'kitchen_print_auto' not in fields_list:
-                fields_list.append('kitchen_print_auto')
-        return result
+        parent_func = getattr(super(PosConfig, self), '_loader_params_pos_config', None)
+        if parent_func:
+            result = parent_func()
+            if isinstance(result, dict) and 'search_params' in result:
+                fields_list = result['search_params'].setdefault('fields', [])
+                if 'kitchen_print' not in fields_list:
+                    fields_list.append('kitchen_print')
+                if 'kitchen_print_auto' not in fields_list:
+                    fields_list.append('kitchen_print_auto')
+            return result
+        return {'search_params': {'fields': ['kitchen_print', 'kitchen_print_auto']}}
+
+    def _load_pos_data_fields(self, config_id):
+        parent_func = getattr(super(PosConfig, self), '_load_pos_data_fields', None)
+        fields_list = list(parent_func(config_id)) if parent_func else []
+        if 'kitchen_print' not in fields_list:
+            fields_list.append('kitchen_print')
+        if 'kitchen_print_auto' not in fields_list:
+            fields_list.append('kitchen_print_auto')
+        return fields_list
+
 
 
 class ResConfigSettings(models.TransientModel):

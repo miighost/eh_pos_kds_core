@@ -175,10 +175,4 @@ if (ActionpadWidget && ActionpadWidget.prototype) {
     patch(ActionpadWidget.prototype, commonMethods);
 }
 
-try {
-    const { ControlButtons } = require("@point_of_sale/app/screens/product_screen/control_buttons/control_buttons");
-    if (ControlButtons && ControlButtons.prototype) {
-        patch(ControlButtons.prototype, commonMethods);
-    }
-} catch (_e) {}
 
