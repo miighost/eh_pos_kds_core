@@ -132,8 +132,6 @@ export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null)
         const printedQty = typeof line.printed_qty === "number" ? line.printed_qty : 0;
         const newQty = Math.max(0, qtyNum - printedQty);
         const cancelledQty = Math.max(0, printedQty - qtyNum);
-        const isNew = newQty > 0;
-        const isCancelled = cancelledQty > 0;
 
         const lineData = {
             qty: qtyStr,
@@ -144,25 +142,54 @@ export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null)
             product_name: productName,
             attribute_values: attributeValues,
             note: note,
-            is_new: isNew,
-            is_cancelled: isCancelled,
+            is_new: newQty > 0,
+            is_cancelled: cancelledQty > 0,
         };
 
-        if (isNew) {
+        if (printedQty > 0 && newQty > 0) {
+            // Added quantity to an existing previously printed line
             hasNewItems = true;
-            newLines.push(lineData);
-        } else if (isCancelled) {
+            newLines.push({
+                ...lineData,
+                qty: String(newQty),
+                qty_num: newQty,
+            });
+            sentLines.push({
+                ...lineData,
+                qty: String(printedQty),
+                qty_num: printedQty,
+            });
+        } else if (printedQty === 0 && newQty > 0) {
+            // Brand new line never printed before
+            hasNewItems = true;
+            newLines.push({
+                ...lineData,
+                qty: String(newQty),
+                qty_num: newQty,
+            });
+        } else if (cancelledQty > 0) {
+            // Quantity reduced / line removed
             hasCancelledItems = true;
             cancelledLines.push({
                 ...lineData,
                 qty: String(cancelledQty),
+                qty_num: cancelledQty,
             });
+            if (qtyNum > 0) {
+                sentLines.push({
+                    ...lineData,
+                    qty: String(qtyNum),
+                    qty_num: qtyNum,
+                });
+            }
         } else {
+            // Unchanged previously printed line
             sentLines.push(lineData);
         }
 
         return lineData;
     });
+
 
     let dateStr = "";
     try {
