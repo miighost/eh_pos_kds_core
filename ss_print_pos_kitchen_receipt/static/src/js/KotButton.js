@@ -235,17 +235,7 @@ async function doForceBrowserPrintDialog(posStore, currentOrder) {
             );
         } catch (_e) {}
     }
-
-    const lines = getOrderLines(order);
-    for (const line of lines) {
-        const qtyNum = line.get_quantity ? line.get_quantity() : (line.quantity || line.qty || 1);
-        line.printed_qty = qtyNum;
-        line.saved_printed_qty = qtyNum;
-        line.was_printed = true;
-    }
-    order.was_kot_printed = true;
 }
-
 
 
 const commonMethods = {
@@ -288,7 +278,15 @@ patch(ProductScreen.prototype, {
 
 if (ActionpadWidget && ActionpadWidget.prototype) {
     patch(ActionpadWidget.prototype, {
+        get hasOrderItems() {
+            const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
+            if (!order) return false;
+            const lines = getOrderLines(order);
+            return lines && lines.length > 0;
+        },
+
         get hasChangesToOrder() {
+
             const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
             if (!order) return false;
             const food = exportForKitchenPrinting(this.pos, order, "Food");
