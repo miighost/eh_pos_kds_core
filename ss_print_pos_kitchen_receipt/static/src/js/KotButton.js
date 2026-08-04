@@ -235,7 +235,17 @@ async function doForceBrowserPrintDialog(posStore, currentOrder) {
             );
         } catch (_e) {}
     }
+
+    const lines = getOrderLines(order);
+    for (const line of lines) {
+        const qtyNum = line.get_quantity ? line.get_quantity() : (line.quantity || line.qty || 1);
+        line.printed_qty = qtyNum;
+        line.saved_printed_qty = qtyNum;
+        line.was_printed = true;
+    }
+    order.was_kot_printed = true;
 }
+
 
 
 const commonMethods = {
