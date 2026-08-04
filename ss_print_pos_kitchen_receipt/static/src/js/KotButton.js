@@ -3,6 +3,7 @@
 import { patch } from "@web/core/utils/patch";
 import { ProductScreen } from "@point_of_sale/app/screens/product_screen/product_screen";
 import { ActionpadWidget } from "@point_of_sale/app/screens/product_screen/action_pad/action_pad";
+import { ControlButtons } from "@point_of_sale/app/screens/product_screen/control_buttons/control_buttons";
 import { KitchenReceiptComponent } from "./KitchenReceiptComponent";
 import { exportForKitchenPrinting } from "./utils";
 
@@ -324,6 +325,12 @@ if (ActionpadWidget && ActionpadWidget.prototype) {
         ...commonMethods,
     });
 }
+
+if (ControlButtons && ControlButtons.prototype) {
+    patch(ControlButtons.prototype, commonMethods);
+}
+
+
 
 
 
