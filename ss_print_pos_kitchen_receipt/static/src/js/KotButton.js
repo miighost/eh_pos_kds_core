@@ -59,38 +59,43 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
     }
 
 
-    let printedDirectAll = true;
-    for (const item of categoriesToPrint) {
-        item.data.category_title = item.title;
+    const hasDirectPrinters = Boolean(
+        (pos.config && (pos.config.is_order_printer || pos.config.module_pos_restaurant)) ||
+        (pos.printers && pos.printers.length > 0) ||
+        (pos.unregistered_printers && pos.unregistered_printers.length > 0) ||
+        (pos.hardware_proxy && pos.hardware_proxy.printer)
+    );
+
+    if (hasDirectPrinters) {
+        // 1. Silent direct LAN ePOS printing to Jiko & Bar1 (No browser dialog popup)
         if (pos.hardware_proxy && pos.hardware_proxy.printer) {
-            try {
-                const res = await pos.hardware_proxy.printer.print_receipt(
-                    KitchenReceiptComponent,
-                    { data: item.data }
-                );
-                if (!res || !res.result) {
-                    printedDirectAll = false;
-                }
-            } catch (_e) {
-                printedDirectAll = false;
+            for (const item of categoriesToPrint) {
+                item.data.category_title = item.title;
+                try {
+                    await pos.hardware_proxy.printer.print_receipt(
+                        KitchenReceiptComponent,
+                        { data: item.data }
+                    );
+                } catch (_e) {}
             }
-        } else {
-            printedDirectAll = false;
+        }
+        if (pos.sendOrderInPreparation) {
+            try {
+                await pos.sendOrderInPreparation(order);
+            } catch (_e) {}
+        }
+    } else {
+        // 2. Web Browser Fallback (Local USB printer - opens print dialog)
+        if (pos.printer && typeof pos.printer.print === "function") {
+            try {
+                await pos.printer.print(
+                    KitchenReceiptComponent,
+                    { tickets: categoriesToPrint, data: categoriesToPrint[0].data },
+                    { webPrintFallback: true }
+                );
+            } catch (_e) {}
         }
     }
-
-    if (!printedDirectAll && pos.printer && typeof pos.printer.print === "function") {
-        try {
-            await pos.printer.print(
-                KitchenReceiptComponent,
-                { tickets: categoriesToPrint, data: categoriesToPrint[0].data },
-                { webPrintFallback: true }
-            );
-        } catch (_e) {
-            // ignore
-        }
-    }
-
 
     if (categoriesToPrint.length > 0) {
         for (const line of lines) {
@@ -101,16 +106,8 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
         }
         order.was_kot_printed = true;
     }
-
-
-    if (pos.sendOrderInPreparation) {
-        try {
-            await pos.sendOrderInPreparation(order);
-        } catch (_e) {
-            // ignore network printer errors during testing
-        }
-    }
 }
+
 
 
 async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
