@@ -7,12 +7,12 @@
             <div class="d-flex w-100 gap-1 mt-1">
                 <button class="button btn btn-primary btn-lg flex-fill py-3 order-kitchen-button"
                         style="background-color: #28a745 !important; border-color: #28a745 !important; color: #ffffff !important; font-weight: bold; font-size: 16px; cursor: pointer;"
-                        t-on-click="() => (this.onClickOrderButton ? this.onClickOrderButton() : (this.pos &amp;&amp; this.pos.sendOrderAndReturnToTables &amp;&amp; this.pos.sendOrderAndReturnToTables()))">
+                        t-on-click="onClickOrderButton">
                     <i class="fa fa-paper-plane me-1"/> Order
                 </button>
                 <button class="button btn btn-secondary btn-lg flex-fill py-3 kot-button"
                         style="font-weight: bold; font-size: 16px; cursor: pointer;"
-                        t-on-click="() => (this.pos &amp;&amp; this.pos.printKitchenReceipt ? this.pos.printKitchenReceipt() : (this.printKitchenReceipt &amp;&amp; this.printKitchenReceipt()))">
+                        t-on-click="printKitchenReceipt">
                     <i class="fa fa-cutlery me-1"/> KOT
                 </button>
             </div>
@@ -20,4 +20,5 @@
     </t>
 
 </templates>
+
 

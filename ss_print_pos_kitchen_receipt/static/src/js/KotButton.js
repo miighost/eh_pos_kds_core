@@ -141,17 +141,7 @@ async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
     }
 }
 
-patch(ProductScreen.prototype, {
-    setup() {
-        super.setup();
-        if (this.pos) {
-            this.pos.printKitchenReceipt = (order) =>
-                doPrintKitchenReceipt(this.pos, order || this.currentOrder || (this.pos.get_order && this.pos.get_order()));
-            this.pos.sendOrderAndReturnToTables = (order) =>
-                doSendOrderToKitchenAndReturnToTables(this.pos, order || this.currentOrder || (this.pos.get_order && this.pos.get_order()));
-        }
-    },
-
+const commonMethods = {
     async printKitchenReceipt() {
         const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
         await doPrintKitchenReceipt(this.pos, order);
@@ -166,18 +156,29 @@ patch(ProductScreen.prototype, {
         const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
         await doSendOrderToKitchenAndReturnToTables(this.pos, order);
     },
+};
+
+patch(ProductScreen.prototype, {
+    setup() {
+        super.setup();
+        if (this.pos) {
+            this.pos.printKitchenReceipt = (order) =>
+                doPrintKitchenReceipt(this.pos, order || this.currentOrder || (this.pos.get_order && this.pos.get_order()));
+            this.pos.sendOrderAndReturnToTables = (order) =>
+                doSendOrderToKitchenAndReturnToTables(this.pos, order || this.currentOrder || (this.pos.get_order && this.pos.get_order()));
+        }
+    },
+    ...commonMethods,
 });
 
 if (ActionpadWidget && ActionpadWidget.prototype) {
-    patch(ActionpadWidget.prototype, {
-        async onClickOrderButton() {
-            const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
-            await doSendOrderToKitchenAndReturnToTables(this.pos, order);
-        },
-
-        async sendOrderAndReturnToTables() {
-            const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
-            await doSendOrderToKitchenAndReturnToTables(this.pos, order);
-        },
-    });
+    patch(ActionpadWidget.prototype, commonMethods);
 }
+
+try {
+    const { ControlButtons } = require("@point_of_sale/app/screens/product_screen/control_buttons/control_buttons");
+    if (ControlButtons && ControlButtons.prototype) {
+        patch(ControlButtons.prototype, commonMethods);
+    }
+} catch (_e) {}
+
