@@ -388,7 +388,8 @@ export class KdsBoard extends Component {
     }
 
     _priorityRank(card) {
-        return { vip: 0, rush: 1, normal: 2 }[card.priority] ?? 2;
+        const rank = { vip: 0, rush: 1, normal: 2 }[card.priority];
+        return rank !== undefined && rank !== null ? rank : 2;
     }
 
     // -- timing + SLA --------------------------------------------------------
@@ -430,14 +431,17 @@ export class KdsBoard extends Component {
             const secs = Math.max(0, Math.floor((end - start) / 1000));
             const m = Math.floor(secs / 60);
             const s = secs % 60;
-            return `✓ ${m}:${s.toString().padStart(2, "0")}`;
+            const sStr = s < 10 ? "0" + s : "" + s;
+            return "✓ " + m + ":" + sStr;
         }
         const timestamp = card.changed_at || card.placed_at;
         const secs = Math.max(0, Math.floor((this._serverNow() - this._parse(timestamp)) / 1000));
         const m = Math.floor(secs / 60);
         const s = secs % 60;
-        return `${m}:${s.toString().padStart(2, "0")}`;
+        const sStr = s < 10 ? "0" + s : "" + s;
+        return "" + m + ":" + sStr;
     }
+
 
     slaClass(card) {
         if (this.isLastLane(card)) {
