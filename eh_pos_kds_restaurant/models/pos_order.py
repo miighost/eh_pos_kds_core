@@ -28,18 +28,20 @@ class PosOrder(models.Model):
             return super()._eh_kds_routable_lines()
         # a line reaches the kitchen only once its course is fired; lines with
         # no course (a la carte) fire immediately
-        return self.lines.filtered(lambda l: (not l.course_id) or l.course_id.fired)
+        return self.lines.filtered(lambda l: (not getattr(l, "course_id", False)) or getattr(l.course_id, "fired", True))
 
     def _eh_kds_ticket_vals(self):
         vals = super()._eh_kds_ticket_vals()
-        if self._is_eh_kds_restaurant() and self.table_id:
-            vals["eh_table_id"] = self.table_id.id
+        table = getattr(self, "table_id", False)
+        if self._is_eh_kds_restaurant() and table:
+            vals["eh_table_id"] = table.id
         return vals
 
     def _eh_kds_item_vals(self, line):
         vals = super()._eh_kds_item_vals(line)
-        if line.course_id:
-            vals["eh_course_id"] = line.course_id.id
+        course = getattr(line, "course_id", False)
+        if course:
+            vals["eh_course_id"] = course.id
         return vals
 
     def _eh_kds_ref(self):

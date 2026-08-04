@@ -69,11 +69,12 @@ class PosOrder(models.Model):
 
         touched = self.env["eh.kds.board"].sudo()
         for line in self._eh_kds_routable_lines():
-            items = ticket.item_ids.filtered(lambda i, line=line: i.pos_order_line_uuid == line.uuid)
+            line_uuid = getattr(line, "uuid", False) or str(line.id)
+            items = ticket.item_ids.filtered(lambda i, lu=line_uuid: i.pos_order_line_uuid == lu)
             known = sum(i.quantity - i.cancelled for i in items)
             delta = line.qty - known
             if delta > 0:
-                attr_value_ids = line.product_id.product_template_attribute_value_ids.ids
+                attr_value_ids = line.product_id.product_template_attribute_value_ids.ids if hasattr(line.product_id, "product_template_attribute_value_ids") else []
 
                 # Check if there is an existing item whose cards are ALL still in the initial lane (Queued) and status 'placed'
                 unbumped_item = False
@@ -94,7 +95,7 @@ class PosOrder(models.Model):
                                 "product_id": line.product_id.id,
                                 "quantity": delta,
                                 "pos_order_line_id": line.id,
-                                "pos_order_line_uuid": line.uuid,
+                                "pos_order_line_uuid": line_uuid,
                                 "customer_note": getattr(line, "customer_note", False) or getattr(line, "note", False),
                                 "note": getattr(line, "note", False),
                                 "attribute_value_ids": [(6, 0, attr_value_ids)],

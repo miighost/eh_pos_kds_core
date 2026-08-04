@@ -18,6 +18,16 @@ def _boot_blob(token, name, mode="board"):
     return base64.b64encode(json.dumps({"token": token, "name": name, "mode": mode}).encode()).decode()
 
 
+def _get_csrf():
+    try:
+        return request.csrf_token()
+    except Exception:
+        try:
+            return request.csrf_token(None)
+        except Exception:
+            return ""
+
+
 def _session_info():
     IrHttp = request.env["ir.http"]
     if hasattr(IrHttp, "session_info"):
@@ -45,7 +55,7 @@ class EhKdsBoardPage(http.Controller):
         odoo_json = Markup(
             json.dumps(
                 {
-                    "csrf_token": request.csrf_token(None),
+                    "csrf_token": _get_csrf(),
                     "__session_info__": session_info,
                 }
             )
@@ -87,7 +97,7 @@ class EhKdsBoardPage(http.Controller):
         odoo_json = Markup(
             json.dumps(
                 {
-                    "csrf_token": request.csrf_token(None),
+                    "csrf_token": _get_csrf(),
                     "__session_info__": session_info,
                 }
             )
