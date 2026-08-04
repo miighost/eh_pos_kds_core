@@ -129,9 +129,20 @@ export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null)
             note = line.note || "";
         }
 
-        const printedQty = typeof line.printed_qty === "number" ? line.printed_qty : 0;
+        let printedQty = 0;
+        if (typeof line.printed_qty === "number") {
+            printedQty = line.printed_qty;
+        } else if (typeof line.saved_printed_qty === "number") {
+            printedQty = line.saved_printed_qty;
+        } else if (typeof line.get_printed_qty === "function") {
+            printedQty = line.get_printed_qty();
+        } else if (line.was_printed && !line.is_new_line) {
+            printedQty = qtyNum;
+        }
+
         const newQty = Math.max(0, qtyNum - printedQty);
         const cancelledQty = Math.max(0, printedQty - qtyNum);
+
 
         const lineData = {
             qty: qtyStr,

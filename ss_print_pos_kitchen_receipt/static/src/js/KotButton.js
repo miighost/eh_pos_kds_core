@@ -35,9 +35,10 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
         return;
     }
     const lines = getOrderLines(order);
-    if (lines.length === 0) {
+    if (lines.length === 0 && !order.was_kot_printed) {
         return;
     }
+
 
     const categoriesToPrint = [];
     const foodData = exportForKitchenPrinting(pos, order, "Food");
@@ -93,9 +94,12 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
         for (const line of lines) {
             const qtyNum = line.get_quantity ? line.get_quantity() : (line.quantity || line.qty || 1);
             line.printed_qty = qtyNum;
+            line.saved_printed_qty = qtyNum;
+            line.was_printed = true;
         }
         order.was_kot_printed = true;
     }
+
 
     if (pos.sendOrderInPreparation) {
         try {
@@ -117,9 +121,10 @@ async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
         return;
     }
     const lines = getOrderLines(order);
-    if (lines.length === 0) {
+    if (lines.length === 0 && !order.was_kot_printed) {
         return;
     }
+
 
     // 1. Auto print separate KOT tickets for Food vs Drinks (no duplicates)
     try {
