@@ -12,7 +12,7 @@
     'author': "Smartron Solutions Pvt Ltd",
     'website': "https://smartronsolutions.co.uk",
     'category': 'Point of Sale',
-    'version': '19.0.1.0.9',
+    'version': '19.0.1.0.11',
     'data': [
             'views/views.xml',
         ],

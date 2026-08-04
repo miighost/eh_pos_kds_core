@@ -17,13 +17,17 @@ class PosConfig(models.Model):
 
     @api.onchange('is_order_printer')
     def _onchange_is_order_printer(self):
-        if hasattr(self, 'is_order_printer') and not self.is_order_printer:
+        if hasattr(self, 'is_order_printer') and not getattr(self, 'is_order_printer', False):
             self.kitchen_print = False
 
     def _loader_params_pos_config(self):
-        result = super()._loader_params_pos_config() if hasattr(super(), '_loader_params_pos_config') else {'search_params': {'fields': []}}
-        if 'search_params' in result and 'fields' in result['search_params']:
-            fields_list = result['search_params']['fields']
+        try:
+            result = super()._loader_params_pos_config()
+        except (AttributeError, Exception):
+            result = {'search_params': {'fields': []}}
+
+        if isinstance(result, dict) and 'search_params' in result:
+            fields_list = result['search_params'].setdefault('fields', [])
             if 'kitchen_print' not in fields_list:
                 fields_list.append('kitchen_print')
             if 'kitchen_print_auto' not in fields_list:
@@ -33,8 +37,8 @@ class PosConfig(models.Model):
     @api.model
     def _load_pos_data_read(self, records=None, config=None, *args, **kwargs):
         try:
-            data = super()._load_pos_data_read(records, config, *args, **kwargs) if hasattr(super(), '_load_pos_data_read') else []
-        except Exception:
+            data = super()._load_pos_data_read(records, config, *args, **kwargs)
+        except (AttributeError, Exception):
             data = []
 
         if data and isinstance(data, list) and len(data) > 0 and isinstance(data[0], dict):
@@ -55,11 +59,12 @@ class ResConfigSettings(models.TransientModel):
 
     @api.onchange('pos_module_pos_restaurant')
     def _onchange_pos_module_pos_restaurant(self):
-        if hasattr(self, 'pos_module_pos_restaurant') and not self.pos_module_pos_restaurant:
+        if hasattr(self, 'pos_module_pos_restaurant') and not getattr(self, 'pos_module_pos_restaurant', False):
             self.kitchen_print_auto = False
             self.kitchen_print = False
 
     @api.onchange('pos_is_order_printer')
     def _onchange_pos_is_order_printer(self):
-        if hasattr(self, 'pos_is_order_printer') and not self.pos_is_order_printer:
+        if hasattr(self, 'pos_is_order_printer') and not getattr(self, 'pos_is_order_printer', False):
             self.kitchen_print = False
+
