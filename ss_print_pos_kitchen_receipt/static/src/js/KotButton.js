@@ -212,7 +212,30 @@ patch(ProductScreen.prototype, {
 });
 
 if (ActionpadWidget && ActionpadWidget.prototype) {
-    patch(ActionpadWidget.prototype, commonMethods);
+    patch(ActionpadWidget.prototype, {
+        get changeSummary() {
+            const order = this.currentOrder || (this.pos && this.pos.get_order && this.pos.get_order());
+            if (!order) return null;
+            const food = exportForKitchenPrinting(this.pos, order, "Food");
+            const drinks = exportForKitchenPrinting(this.pos, order, "Drinks");
+
+            const newFood = (food && food.new_lines) ? food.new_lines.reduce((a, l) => a + (l.qty_num || 0), 0) : 0;
+            const cancFood = (food && food.cancelled_lines) ? food.cancelled_lines.reduce((a, l) => a + (l.qty_num || 0), 0) : 0;
+            const newDrinks = (drinks && drinks.new_lines) ? drinks.new_lines.reduce((a, l) => a + (l.qty_num || 0), 0) : 0;
+            const cancDrinks = (drinks && drinks.cancelled_lines) ? drinks.cancelled_lines.reduce((a, l) => a + (l.qty_num || 0), 0) : 0;
+
+            const parts = [];
+            if (newFood > 0) parts.push(`Food +${newFood}`);
+            else if (cancFood > 0) parts.push(`Food -${cancFood}`);
+
+            if (newDrinks > 0) parts.push(`Drinks +${newDrinks}`);
+            else if (cancDrinks > 0) parts.push(`Drinks -${cancDrinks}`);
+
+            return parts.length > 0 ? parts.join(" | ") : null;
+        },
+        ...commonMethods,
+    });
 }
+
 
 
