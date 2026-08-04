@@ -5,23 +5,22 @@
         <div class="pos-receipt p-1" style="font-family: monospace; max-width: 300px; margin: 0 auto; color: #000;">
             <!-- Header -->
             <div class="pos-receipt-header text-center">
-                <div style="font-size: 200%; font-weight: 900; letter-spacing: 1px; margin-bottom: 2px;">
-                    KOT <t t-if="props.data.category_title"> - <t t-esc="props.data.category_title"/></t>
+                <div style="font-size: 180%; font-weight: 900; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase;">
+                    KOT<t t-if="props.data.category_title"> (<t t-esc="props.data.category_title.replace('KITCHEN ', '').replace('BAR ', '').replace('(', '').replace(')', '')"/>)</t>
                 </div>
-                <div t-if="props.data.is_addition" style="font-size: 110%; font-weight: bold; background-color: #000; color: #fff; padding: 2px 5px; margin-bottom: 4px; display: inline-block;">
+                <div t-if="props.data.is_addition" style="font-size: 100%; font-weight: bold; background-color: #000; color: #fff; padding: 2px 6px; margin-bottom: 4px; display: inline-block;">
                     *** NEW ADDITION ***
                 </div>
 
-                <div t-if="props.data.table_name" style="font-size: 150%; font-weight: bold; margin: 3px 0; border-bottom: 2px solid #000; padding-bottom: 2px;">
-                    TABLE: <span t-esc="props.data.table_name"/>
-                    <t t-if="props.data.floor_name"> (<t t-esc="props.data.floor_name"/>)</t>
+                <div t-if="props.data.table_name" style="font-size: 160%; font-weight: 900; margin: 4px 0; border-bottom: 2px solid #000; padding-bottom: 3px;">
+                    T<span t-esc="props.data.table_name"/><t t-if="props.data.floor_name"> (<t t-esc="props.data.floor_name"/>)</t>
                 </div>
 
-                <div class="d-flex justify-content-between" style="font-size: 85%; margin-top: 4px;">
-                    <span>Order: <strong t-esc="props.data.name"/></span>
-                    <span t-esc="props.data.date"/>
+                <div class="d-flex justify-content-between align-items-center" style="font-size: 85%; margin-top: 4px; font-weight: bold;">
+                    <span><t t-esc="props.data.name"/></span>
+                    <span><t t-esc="props.data.date"/></span>
                 </div>
-                <div t-if="props.data.cashier" class="text-start" style="font-size: 85%;">
+                <div t-if="props.data.cashier" class="text-start" style="font-size: 85%; font-weight: bold; margin-top: 2px;">
                     Server: <span t-esc="props.data.cashier"/>
                 </div>
             </div>

@@ -131,15 +131,32 @@ async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
         }
     }
 
-    // 3. Return to FloorScreen
-    if (pos.showScreen) {
+    // 3. Return to FloorScreen / Tables map (/pos/ui/<config_id>/floor)
+    let navigated = false;
+    if (pos.router && typeof pos.router.navigate === "function") {
+        try {
+            pos.router.navigate("floor");
+            navigated = true;
+        } catch (_e) {}
+    }
+    if (!navigated && pos.showScreen) {
         try {
             pos.showScreen("FloorScreen");
-        } catch (_e) {
-            // fallback
-        }
+            navigated = true;
+        } catch (_e) {}
+    }
+    if (!navigated && pos.showScreen) {
+        try {
+            pos.showScreen("floor");
+        } catch (_e) {}
+    }
+    if (typeof pos.set_table === "function") {
+        try {
+            pos.set_table(null);
+        } catch (_e) {}
     }
 }
+
 
 const commonMethods = {
     async printKitchenReceipt() {
