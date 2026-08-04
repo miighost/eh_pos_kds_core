@@ -5,8 +5,8 @@
         <div class="pos-receipt p-1" style="font-family: monospace; max-width: 300px; margin: 0 auto; color: #000;">
             <!-- Header -->
             <div class="pos-receipt-header text-center">
-                <div style="font-size: 180%; font-weight: 900; letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase;">
-                    KOT<t t-if="props.data.category_title"> (<t t-esc="props.data.category_title.replace('KITCHEN ', '').replace('BAR ', '').replace('(', '').replace(')', '')"/>)</t>
+                <div style="font-size: 220%; font-weight: 900; letter-spacing: 2px; margin-bottom: 2px; text-transform: uppercase;">
+                    <t t-esc="props.data.category_title || 'KITCHEN'"/>
                 </div>
                 <div t-if="props.data.is_addition" style="font-size: 100%; font-weight: bold; background-color: #000; color: #fff; padding: 2px 6px; margin-bottom: 4px; display: inline-block;">
                     *** NEW ADDITION ***
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center" style="font-size: 85%; margin-top: 4px; font-weight: bold;">
-                    <span><t t-esc="props.data.name"/></span>
+                    <span>Order: <t t-esc="props.data.name"/></span>
                     <span><t t-esc="props.data.date"/></span>
                 </div>
                 <div t-if="props.data.cashier" class="text-start" style="font-size: 85%; font-weight: bold; margin-top: 2px;">
@@ -48,6 +48,29 @@
                     </div>
                 </div>
             </div>
+
+            <!-- CANCELLED / REMOVED SECTION -->
+            <div t-if="props.data.cancelled_lines &amp;&amp; props.data.cancelled_lines.length > 0" class="pos-receipt-body mb-2">
+                <div style="font-weight: 900; font-size: 125%; margin-bottom: 4px; border: 2px solid #000; color: #000; text-align: center; padding: 2px 0;">
+                    🚫 CANCELLED / REMOVED
+                </div>
+                <div t-foreach="props.data.cancelled_lines" t-as="line" t-key="line_index" style="font-size: 120%; margin: 6px 0; padding-bottom: 4px; border-bottom: 1px dotted #000;">
+                    <div class="d-flex align-items-baseline">
+                        <strong class="me-2" style="font-size: 140%; font-weight: 900; min-width: 38px; text-decoration: line-through;" t-esc="line.qty + 'x'"/>
+                        <strong style="font-size: 130%; font-weight: 900; text-decoration: line-through;" t-esc="line.product_name"/>
+                        <span style="font-size: 80%; font-weight: 900; background-color: #000; color: #fff; padding: 1px 5px; border-radius: 3px; margin-left: 6px;">
+                            CANCELLED
+                        </span>
+                    </div>
+                    <div t-if="line.attribute_values" style="font-size: 90%; font-weight: bold; margin-left: 38px; color: #000;">
+                        <t t-esc="line.attribute_values"/>
+                    </div>
+                    <div t-if="line.note" style="font-size: 95%; margin-left: 38px; font-weight: 900; color: #000; margin-top: 2px;">
+                        📌 Note: <t t-esc="line.note"/>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- PREVIOUSLY SENT SECTION (Separated below) -->
             <div t-if="props.data.sent_lines &amp;&amp; props.data.sent_lines.length > 0" class="pos-receipt-body mt-2">

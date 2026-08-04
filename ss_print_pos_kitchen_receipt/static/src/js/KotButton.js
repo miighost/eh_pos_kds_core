@@ -42,12 +42,12 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
     const categoriesToPrint = [];
     const foodData = exportForKitchenPrinting(pos, order, "Food");
     if (foodData && (foodData.has_new_items || !order.was_kot_printed) && foodData.orderlines.length > 0) {
-        categoriesToPrint.push({ title: "KITCHEN (FOOD)", data: foodData });
+        categoriesToPrint.push({ title: "KITCHEN", data: foodData });
     }
 
     const drinksData = exportForKitchenPrinting(pos, order, "Drinks");
     if (drinksData && (drinksData.has_new_items || !order.was_kot_printed) && drinksData.orderlines.length > 0) {
-        categoriesToPrint.push({ title: "BAR (DRINKS)", data: drinksData });
+        categoriesToPrint.push({ title: "BAR", data: drinksData });
     }
 
     if (categoriesToPrint.length === 0) {
@@ -56,6 +56,7 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
             categoriesToPrint.push({ title: "KITCHEN", data: fullData });
         }
     }
+
 
     for (const item of categoriesToPrint) {
         item.data.category_title = item.title;

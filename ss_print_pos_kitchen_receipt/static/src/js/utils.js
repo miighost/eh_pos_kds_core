@@ -94,8 +94,10 @@ export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null)
     }
 
     let hasNewItems = false;
+    let hasCancelledItems = false;
     const newLines = [];
     const sentLines = [];
+    const cancelledLines = [];
 
     const orderlines = lines.map((line) => {
         const product = line.getProduct ? line.getProduct() : (line.product || {});
@@ -129,22 +131,32 @@ export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null)
 
         const printedQty = typeof line.printed_qty === "number" ? line.printed_qty : 0;
         const newQty = Math.max(0, qtyNum - printedQty);
+        const cancelledQty = Math.max(0, printedQty - qtyNum);
         const isNew = newQty > 0;
+        const isCancelled = cancelledQty > 0;
 
         const lineData = {
             qty: qtyStr,
             qty_num: qtyNum,
             printed_qty: printedQty,
             new_qty: newQty,
+            cancelled_qty: cancelledQty,
             product_name: productName,
             attribute_values: attributeValues,
             note: note,
             is_new: isNew,
+            is_cancelled: isCancelled,
         };
 
         if (isNew) {
             hasNewItems = true;
             newLines.push(lineData);
+        } else if (isCancelled) {
+            hasCancelledItems = true;
+            cancelledLines.push({
+                ...lineData,
+                qty: String(cancelledQty),
+            });
         } else {
             sentLines.push(lineData);
         }
@@ -176,7 +188,7 @@ export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null)
         ? order.getCashierName()
         : (pos.get_cashier ? pos.get_cashier()?.name : "");
 
-    const isAddition = Boolean(order.was_kot_printed && hasNewItems);
+    const isAddition = Boolean(order.was_kot_printed && (hasNewItems || hasCancelledItems));
 
     return {
         name: order.name || order.pos_reference || "N/A",
@@ -188,7 +200,9 @@ export function exportForKitchenPrinting(pos, order, targetCategoryGroup = null)
         orderlines: orderlines,
         new_lines: newLines,
         sent_lines: sentLines,
+        cancelled_lines: cancelledLines,
         is_addition: isAddition,
-        has_new_items: hasNewItems,
+        has_new_items: hasNewItems || hasCancelledItems,
     };
 }
+
