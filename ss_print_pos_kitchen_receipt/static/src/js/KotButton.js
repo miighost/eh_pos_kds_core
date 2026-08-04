@@ -66,36 +66,43 @@ async function doPrintKitchenReceipt(posStore, currentOrder) {
         (pos.hardware_proxy && pos.hardware_proxy.printer)
     );
 
+    let directSuccess = false;
+
     if (hasDirectPrinters) {
-        // 1. Silent direct LAN ePOS printing to Jiko & Bar1 (No browser dialog popup)
+        // 1. Silent direct LAN ePOS printing to Jiko & Bar1
         if (pos.hardware_proxy && pos.hardware_proxy.printer) {
             for (const item of categoriesToPrint) {
                 item.data.category_title = item.title;
                 try {
-                    await pos.hardware_proxy.printer.print_receipt(
+                    const res = await pos.hardware_proxy.printer.print_receipt(
                         KitchenReceiptComponent,
                         { data: item.data }
                     );
+                    if (res && res.result) {
+                        directSuccess = true;
+                    }
                 } catch (_e) {}
             }
         }
         if (pos.sendOrderInPreparation) {
             try {
                 await pos.sendOrderInPreparation(order);
-            } catch (_e) {}
-        }
-    } else {
-        // 2. Web Browser Fallback (Local USB printer - opens print dialog)
-        if (pos.printer && typeof pos.printer.print === "function") {
-            try {
-                await pos.printer.print(
-                    KitchenReceiptComponent,
-                    { tickets: categoriesToPrint, data: categoriesToPrint[0].data },
-                    { webPrintFallback: true }
-                );
+                directSuccess = true;
             } catch (_e) {}
         }
     }
+
+    // 2. Automatic Manual Fallback: If LAN printers fail or are offline, open browser print dialog
+    if (!directSuccess && pos.printer && typeof pos.printer.print === "function") {
+        try {
+            await pos.printer.print(
+                KitchenReceiptComponent,
+                { tickets: categoriesToPrint, data: categoriesToPrint[0].data },
+                { webPrintFallback: true }
+            );
+        } catch (_e) {}
+    }
+
 
     if (categoriesToPrint.length > 0) {
         for (const line of lines) {
@@ -121,8 +128,16 @@ async function doSendOrderToKitchenAndReturnToTables(posStore, currentOrder) {
     }
     const lines = getOrderLines(order);
     if (lines.length === 0 && !order.was_kot_printed) {
+        // Empty order: Navigate back to floor screen directly
+        if (pos.router && typeof pos.router.navigate === "function") {
+            try { pos.router.navigate("floor"); return; } catch (_e) {}
+        }
+        if (pos.showScreen) {
+            try { pos.showScreen("FloorScreen"); return; } catch (_e) {}
+        }
         return;
     }
+
 
 
     // 1. Auto print separate KOT tickets for Food vs Drinks (no duplicates)

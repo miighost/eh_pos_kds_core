@@ -5,7 +5,7 @@
     <t t-name="ss_print_pos_kitchen_receipt.ActionpadWidget" t-inherit="point_of_sale.ActionpadWidget" t-inherit-mode="extension">
         <xpath expr="//div[1]" position="inside">
             <button class="button btn btn-primary btn-lg w-100 py-3 mt-1 order-kitchen-button"
-                    style="background-color: #28a745 !important; border-color: #28a745 !important; color: #ffffff !important; font-weight: bold; font-size: 18px; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: center;"
+                    style="background-color: #28a745 !important; border-color: #28a745 !important; color: #ffffff !important; font-weight: bold; font-size: 18px; cursor: pointer; min-height: 52px; display: flex; align-items: center; justify-content: center; pointer-events: auto !important; opacity: 1 !important; z-index: 10;"
                     t-on-click="() => (this.onClickOrderButton ? this.onClickOrderButton() : (this.pos &amp;&amp; this.pos.sendOrderAndReturnToTables &amp;&amp; this.pos.sendOrderAndReturnToTables()))">
                 <i class="fa fa-paper-plane me-2"/> Order
             </button>
