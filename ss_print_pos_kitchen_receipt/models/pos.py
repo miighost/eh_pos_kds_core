@@ -21,11 +21,7 @@ class PosConfig(models.Model):
             self.kitchen_print = False
 
     def _loader_params_pos_config(self):
-        try:
-            result = super()._loader_params_pos_config()
-        except (AttributeError, Exception):
-            result = {'search_params': {'fields': []}}
-
+        result = super()._loader_params_pos_config()
         if isinstance(result, dict) and 'search_params' in result:
             fields_list = result['search_params'].setdefault('fields', [])
             if 'kitchen_print' not in fields_list:
@@ -33,22 +29,6 @@ class PosConfig(models.Model):
             if 'kitchen_print_auto' not in fields_list:
                 fields_list.append('kitchen_print_auto')
         return result
-
-    @api.model
-    def _load_pos_data_read(self, records=None, config=None, *args, **kwargs):
-        try:
-            data = super()._load_pos_data_read(records, config, *args, **kwargs)
-        except (AttributeError, Exception):
-            data = []
-
-        if data and isinstance(data, list) and len(data) > 0 and isinstance(data[0], dict):
-            cfg = config or (records[:1] if records else False)
-            if cfg:
-                data[0].update({
-                    'kitchen_print': getattr(cfg, 'kitchen_print', True),
-                    'kitchen_print_auto': getattr(cfg, 'kitchen_print_auto', False),
-                })
-        return data
 
 
 class ResConfigSettings(models.TransientModel):
@@ -67,4 +47,5 @@ class ResConfigSettings(models.TransientModel):
     def _onchange_pos_is_order_printer(self):
         if hasattr(self, 'pos_is_order_printer') and not getattr(self, 'pos_is_order_printer', False):
             self.kitchen_print = False
+
 
