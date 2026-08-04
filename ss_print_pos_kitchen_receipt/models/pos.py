@@ -20,15 +20,7 @@ class PosConfig(models.Model):
         if hasattr(self, 'is_order_printer') and not getattr(self, 'is_order_printer', False):
             self.kitchen_print = False
 
-    def _loader_params_pos_config(self):
-        result = super()._loader_params_pos_config()
-        if isinstance(result, dict) and 'search_params' in result:
-            fields_list = result['search_params'].setdefault('fields', [])
-            if 'kitchen_print' not in fields_list:
-                fields_list.append('kitchen_print')
-            if 'kitchen_print_auto' not in fields_list:
-                fields_list.append('kitchen_print_auto')
-        return result
+
 
 
 
